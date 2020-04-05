@@ -1,9 +1,11 @@
+package Algorithm;
+
 import ilog.concert.IloException;
 import ilog.concert.IloNumVar;
 import ilog.cplex.IloCplex;
 
-public class Operator {
-    public void test() throws IloException {
+public class Cplex {
+    public static void test() throws IloException {
         IloCplex cplex = new IloCplex();
         double[] lb = {0.0, 0.0, 0.0};
         double[] ub = {40.0, Double.MAX_VALUE, Double.MAX_VALUE};
@@ -23,7 +25,7 @@ public class Operator {
             cplex.output().println("Solution value = " + cplex.getObjValue());
             double[] val = cplex.getValues(x);
             for (int j = 0; j < val.length; j++)
-                cplex.output().println("x" + (j+1) + "  = " + val[j]);
+                cplex.output().println("x" + (j + 1) + "  = " + val[j]);
         }
         cplex.end();
     }

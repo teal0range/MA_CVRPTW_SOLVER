@@ -1,20 +1,160 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b4b8864d-2101-4ecf-8e69-8f9bac65fc30" name="Default Changelist" comment="" />
+    <list default="true" id="b4b8864d-2101-4ecf-8e69-8f9bac65fc30" name="Default Changelist" comment="进一步完善RoutesMinimizer,Constraints,Routes">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MA_VRPTW_SOLVER.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/c101.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/c102.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/c103.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/c104.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/c105.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/c106.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/c107.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/c108.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/c109.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/c201.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/c202.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/c203.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/c204.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/c205.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/c206.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/c207.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/c208.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r101.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r102.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r103.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r104.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r105.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r106.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r107.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r108.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r109.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r110.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r111.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r112.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r201.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r202.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r203.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r204.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r205.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r206.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r207.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r208.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r209.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r210.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/r211.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/rc101.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/rc102.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/rc103.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/rc104.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/rc105.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/rc106.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/rc107.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/rc108.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/rc201.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/rc202.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/rc203.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/rc204.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/rc205.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/rc206.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/rc207.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestData/rc208.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cplex.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gson-2.8.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/j.cor.2009.06.022.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/j.orl.2009.04.006 .pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Algorithm/Constraints.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Algorithm/Core.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Algorithm/Operator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Algorithm/Routes.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Algorithm/RoutesMinimizer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Algorithm/Timer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Common/AlgoParam.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Common/Instance.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Common/Log.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Common/Nodes.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Common/RandomIndex.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Common/Result.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Common/Solution.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Solver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SolverForTSP.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/SolverForTSP/AntColonySolver.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/SolverForTSP/Nodes.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Operator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Algorithm/Cplex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TspSolver.java" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/AorProject" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1a6QYVsUpmJnvRmnPGFYXDuX3nL" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="create.test.in.the.same.root" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="Common" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Code\JavaCode\SolverForTSP" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Solver">
+    <configuration name="Cplex" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Algorithm.Cplex" />
+      <module name="MA_VRPTW_SOLVER" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Solver" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Solver" />
+      <module name="MA_VRPTW_SOLVER" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Solver" />
+        <item itemvalue="Application.Cplex" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -26,7 +166,80 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1586053611841</updated>
+      <workItem from="1586053615250" duration="12589000" />
+      <workItem from="1586075922822" duration="14748000" />
+      <workItem from="1586095859109" duration="5144000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/AorProject" />
+    </ignored-roots>
+    <MESSAGE value="finished the main Structure" />
+    <MESSAGE value="improving the main Structure" />
+    <MESSAGE value="进一步完善RoutesMinimizer,Constraints,Routes" />
+    <option name="LAST_COMMIT_MESSAGE" value="进一步完善RoutesMinimizer,Constraints,Routes" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="758" y="120" key="#com.intellij.ide.util.MemberChooser" timestamp="1586093591734">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="758" y="120" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1586093591734" />
+    <state x="464" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1586083562792">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="464" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1536.824@0.0.1536.824" timestamp="1586083562792" />
+    <state x="372" y="3" key="CommitChangelistDialog2" timestamp="1586100700948">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="372" y="3" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1586100700948" />
+    <state x="442" y="167" key="FileChooserDialogImpl" timestamp="1586084403390">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="442" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1586084403390" />
+    <state width="1493" height="271" key="GridCell.Tab.0.bottom" timestamp="1586098849481">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="271" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1586098849481" />
+    <state width="1493" height="271" key="GridCell.Tab.0.center" timestamp="1586098849481">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="271" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1586098849481" />
+    <state width="1493" height="271" key="GridCell.Tab.0.left" timestamp="1586098849481">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="271" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1586098849481" />
+    <state width="1493" height="271" key="GridCell.Tab.0.right" timestamp="1586098849481">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="271" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1586098849481" />
+    <state x="110" y="62" width="1122" height="715" key="SettingsEditor" timestamp="1586095824771">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="110" y="62" width="1122" height="715" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1586095824771" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1586087052265">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1586087052265" />
+    <state x="449" y="236" key="com.intellij.ide.util.TipDialog" timestamp="1586075924035">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="449" y="236" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1586075924035" />
+    <state x="485" y="306" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1586085053784">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="485" y="306" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.0.1536.824@0.0.1536.824" timestamp="1586085053784" />
+    <state x="562" y="329" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1586056111941">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="562" y="329" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1586056111941" />
+    <state x="540" y="115" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1586056200791">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="540" y="115" key="com.intellij.testIntegration.createTest.CreateTestDialog/0.0.1536.824@0.0.1536.824" timestamp="1586056200791" />
   </component>
 </project>

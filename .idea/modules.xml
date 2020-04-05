@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SolverForTSP.iml" filepath="$PROJECT_DIR$/SolverForTSP.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MA_VRPTW_SOLVER.iml" filepath="$PROJECT_DIR$/MA_VRPTW_SOLVER.iml" />
     </modules>
   </component>
 </project>
