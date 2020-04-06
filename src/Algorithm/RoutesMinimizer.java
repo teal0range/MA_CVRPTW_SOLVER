@@ -2,6 +2,7 @@ package Algorithm;
 
 import Common.*;
 import com.sun.xml.internal.bind.v2.TODO;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -13,10 +14,10 @@ public class RoutesMinimizer {
     Stack<Nodes> EP;
     int[] penalty;
     long startTime;
-    double maxTime = 10000;
+    double maxTime = 1000000;
 
 
-    public RoutesMinimizer(Instance inst) {
+    public RoutesMinimizer(@NotNull Instance inst) {
         this.inst = inst;
         routes = new LinkedList<>();
         for (int i = 1; i < inst.n; i++) {
@@ -30,10 +31,17 @@ public class RoutesMinimizer {
         startTime = System.currentTimeMillis();
     }
 
+    public Solution determineM(){
+        while (!timeIsUp()){
+            DeleteRoute();
+        }
+        return sol;
+    }
     public void DeleteRoute() {
         int rndIndex = rnd.nextInt(routes.size());
         Routes r = routes.get(rndIndex);
         EP.addAll(r.tour);
+        System.out.println(r.tour.toString());
         routes.remove(rndIndex);
         RandomIndex ri = new RandomIndex(routes.size());
         Arrays.fill(penalty, 1);
@@ -45,14 +53,14 @@ public class RoutesMinimizer {
                 int i = ri.nextInt();
                 Routes rt = routes.get(i);
                 RandomIndex rin = new RandomIndex(rt.size()+1);
-                ArrayList<Integer> insertions = new ArrayList<>();
                 // TODO: 2020/4/5 needs optimize
                 for (int pos = rin.nextInt();rin.hasNext();pos=rin.nextInt()){
                     int []p = rt.cons.validInsertion(v_in,pos);
                     if (p==null) {
                         flag = true;
-                        insertions.add(pos);
-                        rt.insert(v_in,insertions.get(rnd.nextInt(insertions.size())));
+                        rt.insert(v_in,pos);
+                        System.out.println("Insert > "+v_in.id +" > "+ i + " > pos > " +pos);
+                        break;
                     }
                     else {
                         penalty_ls.add(p);
@@ -60,7 +68,7 @@ public class RoutesMinimizer {
                 }
             }
             if (!flag){
-                flag = squeeze(v_in,penalty_ls);
+//                flag = squeeze(v_in,penalty_ls);
             }
             if (!flag){
                 // TODO: 2020/4/5 complete this
@@ -76,6 +84,7 @@ public class RoutesMinimizer {
     }
     double alpha = 1;
     public boolean squeeze(Nodes v_in,List<int[]> penalty_ls) {
+        Solution tmp = new Solution(sol);
         double factor = 0.99;
         int []minPenalty=new int[]{Integer.MAX_VALUE,Integer.MAX_VALUE};
         for (int[] penalty:penalty_ls){

@@ -23,7 +23,7 @@ public class Solver {
         ArrayList<Instance> instances = readInstances(param);
         for (Instance instance:instances){
             RoutesMinimizer rtm = new RoutesMinimizer(instance);
-            rtm.DeleteRoute();
+            rtm.determineM();
         }
     }
     static ArrayList<Instance> readInstances(AlgoParam param) throws FileNotFoundException {

@@ -5,6 +5,7 @@ import Common.Instance;
 import Common.Nodes;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Routes {
     Instance inst;
@@ -13,8 +14,17 @@ public class Routes {
     Constraints cons;
 
     public Routes(ArrayList<Nodes> tour, Instance inst) {
+        this.inst = inst;
         this.tour = tour;
         cons = new Constraints(tour, inst);
+        checkFeasibility();
+    }
+
+    public Routes(Routes r) {
+        this.inst = r.inst;
+        this.tour = new ArrayList<>(r.tour.size());
+        Collections.copy(this.tour,r.tour);
+        this.cons = new Constraints(tour,inst);
         checkFeasibility();
     }
 
@@ -38,5 +48,21 @@ public class Routes {
         tour.add(pos,v_in);
         // TODO: 2020/4/6 need optimize
         cons = new Constraints(tour,inst);
+        checkFeasibility();
+    }
+    public void remove(Nodes v_out){
+        tour.remove(v_out);
+        cons = new Constraints(tour,inst);
+        checkFeasibility();
+    }
+    public void remove(int index){
+        tour.remove(index);
+        cons = new Constraints(tour,inst);
+        checkFeasibility();
+    }
+
+    @Override
+    public String toString() {
+        return "size > " + tour.size();
     }
 }

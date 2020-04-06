@@ -2,6 +2,7 @@ package Algorithm;
 
 import Common.Instance;
 import Common.Nodes;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class Constraints {
     public ArrayList<Integer> backTw;
     public int currentWeight;
 
-    public Constraints(List<Nodes> tour, Instance inst) {
+    public Constraints(@NotNull List<Nodes> tour, Instance inst) {
         this.inst = inst;
         this.tour = tour;
         currentWeight = 0;
@@ -43,8 +44,8 @@ public class Constraints {
         return inst.Capacity - currentWeight;
     }
 
-    public int[] validInsertion(Nodes v_in, int pos) {
-        // TODO: 2020/4/6 if its feasible return pos,if not return penalty
+    public int[] validInsertion(@NotNull Nodes v_in, int pos) {
+        // TODO: 2020/4/6 if its feasible return null,if not return penalty
         Nodes pre, post;
         int capacity_penalty=0;
         if (v_in.demands > maxRemains()){
@@ -61,13 +62,14 @@ public class Constraints {
             post = tour.get(pos);
         }
 
-        int tw_penalty = frontTw.get(pos) + backTw.get(pos + 1) + Math.max(arrivalTimesExtended.get(pos)+
-                pre.serviceTime+inst.dist[pre.id][v_in.id] -(zrrivalTimesExtended.get(pos+1)-
+        int tw_penalty = frontTw.get(pos) + backTw.get(pos + 1) + Math.max(Math.max(arrivalTimesExtended.get(pos)+
+                pre.serviceTime+inst.dist[pre.id][v_in.id],v_in.earlyTime)-Math.min(v_in.lateTime,zrrivalTimesExtended.get(pos+1)-
                 inst.dist[v_in.id][post.id]-v_in.serviceTime),0);
 
         if (capacity_penalty>0||tw_penalty>0){
             return new int[]{capacity_penalty,tw_penalty,pos};
         }
+
         else {
             return null;
         }
@@ -92,6 +94,7 @@ public class Constraints {
                 arrivalTimesExtended.set(i,node.lateTime);
             }
             else {
+                frontTw.set(i, frontTw.get(i-1));
                 arrivalTimesExtended.set(i, Math.max(arrivalTimes.get(i), node.earlyTime));
             }
             lastNode = node.id;
@@ -106,6 +109,7 @@ public class Constraints {
             arrivalTimesExtended.set(tour.size()+1,node.lateTime);
         }
         else {
+            frontTw.set(tour.size()+1, frontTw.get(tour.size()));
             arrivalTimesExtended.set(tour.size()+1, Math.max(arrivalTimes.get(tour.size()+1), node.earlyTime));
         }
         currentWeight += node.demands;
@@ -122,6 +126,7 @@ public class Constraints {
                 zrrivalTimesExtended.set(i,node.earlyTime);
             }
             else {
+                backTw.set(i,backTw.get(i+1));
                 zrrivalTimesExtended.set(i,Math.min(node.lateTime,zrrivalTimes.get(i)));
             }
             lastNode = node.id;
@@ -134,6 +139,7 @@ public class Constraints {
             zrrivalTimesExtended.set(0,node.earlyTime);
         }
         else {
+            backTw.set(0,backTw.get(1));
             zrrivalTimesExtended.set(0,Math.min(node.lateTime,zrrivalTimes.get(0)));
         }
     }

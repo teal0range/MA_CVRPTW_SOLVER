@@ -1,29 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b4b8864d-2101-4ecf-8e69-8f9bac65fc30" name="Default Changelist" comment="完整数据读入、完善RouteMinimizer,修正了Constraints的部分bug">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/result/VRPTW/result_EAMA.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/result/vrp/result_EAMA.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/G_Ake.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/G_Ake.xml" afterDir="false" />
+    <list default="true" id="b4b8864d-2101-4ecf-8e69-8f9bac65fc30" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/MA_VRPTW_SOLVER/Algorithm/Constraints.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MA_VRPTW_SOLVER/Algorithm/Constraints.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MA_VRPTW_SOLVER/Algorithm/Core.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MA_VRPTW_SOLVER/Algorithm/Core.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/MA_VRPTW_SOLVER/Algorithm/Operator.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MA_VRPTW_SOLVER/Algorithm/Operator.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/MA_VRPTW_SOLVER/Algorithm/Routes.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MA_VRPTW_SOLVER/Algorithm/Routes.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/MA_VRPTW_SOLVER/Algorithm/RoutesMinimizer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MA_VRPTW_SOLVER/Algorithm/RoutesMinimizer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MA_VRPTW_SOLVER/Common/DoubleTuple.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MA_VRPTW_SOLVER/Common/DoubleTuple.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MA_VRPTW_SOLVER/Common/Instance.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MA_VRPTW_SOLVER/Common/Instance.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/MA_VRPTW_SOLVER/Common/RandomIndex.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MA_VRPTW_SOLVER/Common/RandomIndex.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/MA_VRPTW_SOLVER/Common/Solution.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MA_VRPTW_SOLVER/Common/Solution.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/MA_VRPTW_SOLVER/Solver.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MA_VRPTW_SOLVER/Solver.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Algorithm/Constraints.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Algorithm/Constraints.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Algorithm/Core.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Algorithm/Core.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Algorithm/Operator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Algorithm/Operator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Algorithm/Routes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Algorithm/Routes.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Algorithm/RoutesMinimizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Algorithm/RoutesMinimizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Common/Instance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Common/Instance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Common/RandomIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Common/RandomIndex.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Common/Solution.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Common/Solution.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Solver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Solver.java" afterDir="false" />
     </list>
@@ -126,7 +117,7 @@
       <workItem from="1586075922822" duration="14748000" />
       <workItem from="1586095859109" duration="5872000" />
       <workItem from="1586101764323" duration="11549000" />
-      <workItem from="1586152061400" duration="4436000" />
+      <workItem from="1586152061400" duration="15756000" />
     </task>
     <task id="LOCAL-00001" summary="进一步完善框架">
       <created>1586101031679</created>
@@ -135,7 +126,14 @@
       <option name="project" value="LOCAL" />
       <updated>1586101031679</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="完整数据读入、完善RouteMinimizer,修正了Constraints的部分bug">
+      <created>1586156586840</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1586156586840</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -171,62 +169,67 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="499" y="167" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog/0.0.1536.824@0.0.1536.824" timestamp="1586151896626" />
-    <state x="758" y="120" key="#com.intellij.ide.util.MemberChooser" timestamp="1586093591734">
+    <state x="758" y="120" key="#com.intellij.ide.util.MemberChooser" timestamp="1586162666012">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="758" y="120" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1586093591734" />
+    <state x="758" y="120" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1586162666012" />
     <state x="464" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1586083562792">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="464" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1536.824@0.0.1536.824" timestamp="1586083562792" />
-    <state x="715" y="222" key="#xdebugger.evaluate" timestamp="1586155205642">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="572" y="176" key="#xdebugger.evaluate" timestamp="1586166422062">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state x="572" y="176" key="#xdebugger.evaluate/0.0.1536.824@0.0.1536.824" timestamp="1586166422062" />
     <state x="715" y="222" key="#xdebugger.evaluate/0.0.1920.1040@0.0.1920.1040" timestamp="1586155205642" />
-    <state x="624" y="184" width="796" height="755" key="CommitChangelistDialog2" timestamp="1586156395830">
+    <state x="624" y="184" width="796" height="755" key="CommitChangelistDialog2" timestamp="1586156585963">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="372" y="3" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1586101030663" />
-    <state x="624" y="184" width="796" height="755" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1586156395830" />
+    <state x="624" y="184" width="796" height="755" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1586156585963" />
     <state x="442" y="167" key="FileChooserDialogImpl" timestamp="1586084403390">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="442" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1586084403390" />
-    <state width="1877" height="311" key="GridCell.Tab.0.bottom" timestamp="1586156185297">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1493" height="297" key="GridCell.Tab.0.bottom" timestamp="1586167829696">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="135" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1586152044401" />
-    <state width="1877" height="311" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1586156185297" />
-    <state width="1877" height="311" key="GridCell.Tab.0.center" timestamp="1586156185297">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1493" height="297" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1586167829696" />
+    <state width="1877" height="310" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1586157116064" />
+    <state width="1493" height="297" key="GridCell.Tab.0.center" timestamp="1586167829696">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="135" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1586152044401" />
-    <state width="1877" height="311" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1586156185297" />
-    <state width="1877" height="311" key="GridCell.Tab.0.left" timestamp="1586156185297">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1493" height="297" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1586167829696" />
+    <state width="1877" height="310" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1586157116064" />
+    <state width="1493" height="297" key="GridCell.Tab.0.left" timestamp="1586167829696">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="135" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1586152044401" />
-    <state width="1877" height="311" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1586156185297" />
-    <state width="1877" height="311" key="GridCell.Tab.0.right" timestamp="1586156185297">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1493" height="297" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1586167829696" />
+    <state width="1877" height="310" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1586157116064" />
+    <state width="1493" height="297" key="GridCell.Tab.0.right" timestamp="1586167829696">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="135" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1586152044401" />
-    <state width="1877" height="311" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1586156185297" />
-    <state width="1877" height="311" key="GridCell.Tab.1.bottom" timestamp="1586156185298">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1493" height="297" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1586167829696" />
+    <state width="1877" height="310" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1586157116064" />
+    <state width="1493" height="297" key="GridCell.Tab.1.bottom" timestamp="1586167829698">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="297" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1586167829698" />
     <state width="1877" height="311" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1586156185298" />
-    <state width="1877" height="311" key="GridCell.Tab.1.center" timestamp="1586156185298">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1493" height="297" key="GridCell.Tab.1.center" timestamp="1586167829698">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="297" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1586167829698" />
     <state width="1877" height="311" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1586156185298" />
-    <state width="1877" height="311" key="GridCell.Tab.1.left" timestamp="1586156185298">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1493" height="297" key="GridCell.Tab.1.left" timestamp="1586167829698">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="297" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1586167829698" />
     <state width="1877" height="311" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1586156185298" />
-    <state width="1877" height="311" key="GridCell.Tab.1.right" timestamp="1586156185298">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1493" height="297" key="GridCell.Tab.1.right" timestamp="1586167829698">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
+    <state width="1493" height="297" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1586167829698" />
     <state width="1877" height="311" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1586156185298" />
     <state x="110" y="62" width="1122" height="715" key="SettingsEditor" timestamp="1586137636905">
       <screen x="0" y="0" width="1536" height="824" />
@@ -257,9 +260,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/Algorithm/Constraints.java</url>
-          <line>138</line>
-          <option name="timeStamp" value="21" />
+          <url>file://$PROJECT_DIR$/src/Algorithm/RoutesMinimizer.java</url>
+          <line>35</line>
+          <option name="timeStamp" value="34" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
