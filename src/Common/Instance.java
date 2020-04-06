@@ -20,6 +20,7 @@ public class Instance {
     public String instName;
     public Nodes []nodes;
     public int n;
+    public int maxVehicles;
     public int Capacity;
     public int [][]dist;
     public int [][]closestPoints;
@@ -32,6 +33,10 @@ public class Instance {
         this.Capacity = Capacity;
         this.n = nodes.length;
         computeDistance();
+    }
+
+    public Instance() {
+
     }
 
     public void computeDistance(){

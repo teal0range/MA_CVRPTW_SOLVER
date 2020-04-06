@@ -3,28 +3,53 @@ package Algorithm;
 import Common.Instance;
 import Common.Nodes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Constraints {
     Instance inst;
     List<Nodes> tour;
-    public int[] arrivalTimes;
+    public ArrayList<Integer> arrivalTimesExtended;
+    public ArrayList<Integer> arrivalTimes;
+    public ArrayList<Integer> frontTw;
+    public ArrayList<Integer> zrrivalTimesExtended;
+    public ArrayList<Integer> zrrivalTimes;
+    public ArrayList<Integer> backTw;
     public int currentWeight;
-    public int maxDelay;
-    public int maxRemains;
 
     public Constraints(List<Nodes> tour, Instance inst) {
         this.inst = inst;
         this.tour = tour;
         currentWeight = 0;
-        maxDelay = Integer.MAX_VALUE;
-        arrivalTimes = new int[tour.size() + 2];
+        int red = 5;
+        arrivalTimesExtended = new ArrayList<>(tour.size()+2+red);
+        arrivalTimes = new ArrayList<>(tour.size()+2+red);
+        frontTw = new ArrayList<>(tour.size()+2+red);
+        zrrivalTimesExtended = new ArrayList<>(tour.size()+2+red);
+        zrrivalTimes = new ArrayList<>(tour.size()+2+red);
+        backTw = new ArrayList<>(tour.size()+2+red);
+        for (int i=0;i<tour.size()+2;i++){
+            arrivalTimesExtended.add(0);
+        }
+        arrivalTimes.addAll(arrivalTimesExtended);
+        frontTw.addAll(arrivalTimesExtended);
+        zrrivalTimes.addAll(arrivalTimes);
+        zrrivalTimesExtended.addAll(arrivalTimes);
+        backTw.addAll(arrivalTimes);
         UpdateInfo();
     }
 
-    public boolean validInsertion(Nodes v_in, int pos) {
+    public int maxRemains(){
+        return inst.Capacity - currentWeight;
+    }
+
+    public int[] validInsertion(Nodes v_in, int pos) {
+        // TODO: 2020/4/6 if its feasible return pos,if not return penalty
         Nodes pre, post;
-        if (v_in.demands > maxRemains) return false;
+        int capacity_penalty=0;
+        if (v_in.demands > maxRemains()){
+            capacity_penalty += v_in.demands - maxRemains();
+        }
         if (pos == 0) {
             pre = inst.nodes[0];
             post = tour.get(pos);
@@ -35,13 +60,16 @@ public class Constraints {
             pre = tour.get(pos - 1);
             post = tour.get(pos);
         }
-        int arrivalVin = Math.max(v_in.earlyTime, arrivalTimes[pos] + pre.serviceTime + inst.dist[pre.id][v_in.id]);
-        int newPostTime = Math.max(post.earlyTime, arrivalVin + v_in.serviceTime + inst.dist[v_in.id][post.id]);
-        if (arrivalVin <= v_in.lateTime && newPostTime < post.lateTime) {
-            int insertionDelay = newPostTime - arrivalTimes[pos + 1];
-            return insertionDelay <= maxDelay;
-        } else {
-            return false;
+
+        int tw_penalty = frontTw.get(pos) + backTw.get(pos + 1) + Math.max(arrivalTimesExtended.get(pos)+
+                pre.serviceTime+inst.dist[pre.id][v_in.id] -(zrrivalTimesExtended.get(pos+1)-
+                inst.dist[v_in.id][post.id]-v_in.serviceTime),0);
+
+        if (capacity_penalty>0||tw_penalty>0){
+            return new int[]{capacity_penalty,tw_penalty,pos};
+        }
+        else {
+            return null;
         }
     }
 
@@ -51,26 +79,70 @@ public class Constraints {
     }
 
     public void UpdateInfo() {
-        int lastNode = 0, lastNodeServiceTime = 0;
+        int lastNode = 0, lastNodeServiceTime = inst.nodes[0].serviceTime;
+        currentWeight = 0;
+        arrivalTimes.set(0,inst.nodes[0].earlyTime);
+        arrivalTimesExtended.set(0,inst.nodes[0].earlyTime);
         for (int i = 1; i < tour.size() + 1; i++) {
             Nodes node = tour.get(i - 1);
-            arrivalTimes[i] = Math.max(arrivalTimes[i - 1] + lastNodeServiceTime + inst.dist[lastNode][node.id], node.earlyTime);
+            arrivalTimes.set(i, arrivalTimesExtended.get(i - 1) + lastNodeServiceTime + inst.dist[lastNode][node.id]);
+            int delta_penalty = arrivalTimes.get(i) - node.lateTime;
+            if (delta_penalty > 0){
+                frontTw.set(i, delta_penalty + frontTw.get(i-1));
+                arrivalTimesExtended.set(i,node.lateTime);
+            }
+            else {
+                arrivalTimesExtended.set(i, Math.max(arrivalTimes.get(i), node.earlyTime));
+            }
             lastNode = node.id;
             lastNodeServiceTime = node.serviceTime;
-            if (node.lateTime - arrivalTimes[i] < maxDelay) {
-                maxDelay = node.lateTime - arrivalTimes[i];
-            }
             currentWeight += node.demands;
         }
-        maxRemains = inst.Capacity - currentWeight;
-        arrivalTimes[tour.size() + 1] = arrivalTimes[tour.size()] + lastNodeServiceTime + inst.dist[lastNode][0];
+        Nodes node = inst.nodes[0];
+        arrivalTimes.set(tour.size()+1, arrivalTimesExtended.get(tour.size()) + lastNodeServiceTime + inst.dist[lastNode][node.id]);
+        int delta_penalty = arrivalTimes.get(tour.size()+1) - node.lateTime;
+        if (delta_penalty > 0){
+            frontTw.set(tour.size()+1, delta_penalty + frontTw.get(tour.size()));
+            arrivalTimesExtended.set(tour.size()+1,node.lateTime);
+        }
+        else {
+            arrivalTimesExtended.set(tour.size()+1, Math.max(arrivalTimes.get(tour.size()+1), node.earlyTime));
+        }
+        currentWeight += node.demands;
+
+        lastNode = 0;
+        zrrivalTimesExtended.set(tour.size()+1,inst.nodes[0].lateTime);
+        zrrivalTimes.set(tour.size()+1,zrrivalTimesExtended.get(tour.size()+1));
+        for (int i = tour.size();i>0;i--){
+            node = tour.get(i-1);
+            zrrivalTimes.set(i, zrrivalTimesExtended.get(i + 1) - node.serviceTime - inst.dist[lastNode][node.id]);
+            delta_penalty = node.earlyTime - zrrivalTimes.get(i);
+            if (delta_penalty > 0){
+                backTw.set(i,delta_penalty + backTw.get(i+1));
+                zrrivalTimesExtended.set(i,node.earlyTime);
+            }
+            else {
+                zrrivalTimesExtended.set(i,Math.min(node.lateTime,zrrivalTimes.get(i)));
+            }
+            lastNode = node.id;
+        }
+        node=inst.nodes[0];
+        zrrivalTimes.set(0, zrrivalTimesExtended.get(1) - node.serviceTime - inst.dist[lastNode][node.id]);
+        delta_penalty = node.earlyTime - zrrivalTimes.get(0);
+        if (delta_penalty > 0){
+            backTw.set(0,delta_penalty+ backTw.get(1));
+            zrrivalTimesExtended.set(0,node.earlyTime);
+        }
+        else {
+            zrrivalTimesExtended.set(0,Math.min(node.lateTime,zrrivalTimes.get(0)));
+        }
     }
 
     public boolean checkTimeWindowConstraint() {
-        return maxDelay > 0;
+        return frontTw.get(frontTw.size()-1)==0;
     }
 
     public boolean checkCapacityConstraint() {
-        return maxRemains > 0;
+        return maxRemains() > 0;
     }
 }

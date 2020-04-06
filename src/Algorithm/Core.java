@@ -7,6 +7,7 @@ import java.util.*;
 public class Core extends Thread {
     int N_pop;
     int N_ch;
+    Instance inst;
     ArrayList<Solution> sigma;
     Result res;
 

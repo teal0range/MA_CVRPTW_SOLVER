@@ -18,6 +18,14 @@ public class Routes {
         checkFeasibility();
     }
 
+    public Nodes get(int index){
+        return tour.get(index);
+    }
+
+    public int size(){
+        return tour.size();
+    }
+
     public boolean isFeasible() {
         return isFeasible;
     }
@@ -28,6 +36,7 @@ public class Routes {
 
     public void insert(Nodes v_in,int pos){
         tour.add(pos,v_in);
-        cons.UpdateInfo();
+        // TODO: 2020/4/6 need optimize
+        cons = new Constraints(tour,inst);
     }
 }
