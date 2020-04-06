@@ -1,7 +1,6 @@
 package Algorithm;
 
 import Common.*;
-import com.sun.xml.internal.bind.v2.TODO;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -68,7 +67,7 @@ public class RoutesMinimizer {
                 }
             }
             if (!flag){
-//                flag = squeeze(v_in,penalty_ls);
+                flag = squeeze(v_in,penalty_ls);
             }
             if (!flag){
                 // TODO: 2020/4/5 complete this
@@ -83,12 +82,12 @@ public class RoutesMinimizer {
         // TODO: 2020/4/6 finish this
     }
     double alpha = 1;
-    public boolean squeeze(Nodes v_in,List<int[]> penalty_ls) {
+    public boolean squeeze(Nodes v_in, @NotNull List<int[]> penalty_ls) {
         Solution tmp = new Solution(sol);
         double factor = 0.99;
         int []minPenalty=new int[]{Integer.MAX_VALUE,Integer.MAX_VALUE};
         for (int[] penalty:penalty_ls){
-            if (F(minPenalty)>F(penalty)){
+            if (f(minPenalty)> f(penalty)){
                 minPenalty = penalty;
             }
         }
@@ -96,7 +95,7 @@ public class RoutesMinimizer {
         // TODO: 2020/4/5 finish this
         return false;
     }
-    public double F(int []Penalty){
+    public double f(@NotNull int []Penalty){
         return Penalty[0] + alpha * Penalty[1];
     }
 

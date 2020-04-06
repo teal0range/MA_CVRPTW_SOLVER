@@ -63,6 +63,6 @@ public class Routes {
 
     @Override
     public String toString() {
-        return "size > " + tour.size();
+        return "size > " + tour.size() + " > " +isFeasible;
     }
 }

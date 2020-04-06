@@ -18,7 +18,7 @@ public class RandomIndex {
         Collections.shuffle(index);
     }
     public void reset(){
-//        shuffle();
+        shuffle();
         next = 0;
     }
     public boolean hasNext(){
