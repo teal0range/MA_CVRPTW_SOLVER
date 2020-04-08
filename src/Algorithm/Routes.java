@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
 public class Routes {
     Instance inst;
@@ -63,6 +64,11 @@ public class Routes {
         checkFeasibility();
     }
 
+    public void removeIter(Iterator<Nodes> iter){
+        iter.remove();
+        cons = new Constraints(tour,inst);
+        checkFeasibility();
+    }
     @Override
     public String toString() {
         return "size > " + tour.size() + " > " +isFeasible;

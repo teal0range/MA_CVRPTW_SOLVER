@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class Solution {
@@ -52,7 +53,13 @@ public class Solution {
         caPenalty = 0;
         timeCost = 0;
         scheduleTime = 0;
-        for (Routes r : routes) {
+        Iterator<Routes> iter = routes.iterator();
+        while (iter.hasNext()) {
+            Routes r = iter.next();
+            if (r.size()==0){
+                iter.remove();
+                continue;
+            }
             twPenalty+=r.cons.twPenalty();
             caPenalty+=r.cons.caPenalty();
             timeCost+=r.cons.timeCost();

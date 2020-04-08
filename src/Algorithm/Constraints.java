@@ -44,6 +44,38 @@ public class Constraints {
         return inst.Capacity - currentWeight;
     }
 
+    public int[] validSwap() {
+        return null;
+    }
+
+    public int[] validRemove(int pos){
+        Nodes target = tour.get(pos);
+        Nodes pre, post;
+        int capacity_penalty=0;
+        if (maxRemains()<0){
+            capacity_penalty -= Math.max(tour.get(pos).demands,-maxRemains());
+        }
+        if (pos == 0 && pos==tour.size()-1){
+            pre = inst.nodes[0];
+            post = inst.nodes[0];
+        }
+        else if (pos == 0) {
+            pre = inst.nodes[0];
+            post = tour.get(pos + 1);
+        } else if (pos == tour.size()-1) {
+            pre = tour.get(pos-1);
+            post = inst.nodes[0];
+        } else {
+            pre = tour.get(pos - 1);
+            post = tour.get(pos + 1);
+        }
+        int tw_penalty = - Math.max(Math.max(arrivalTimesExtended.get(pos)+
+                pre.serviceTime+inst.dist[pre.id][target.id],target.earlyTime)-Math.min(target.lateTime,zrrivalTimesExtended.get(pos+2)-
+                inst.dist[target.id][post.id]-target.serviceTime),0);
+        int dis_penalty = inst.dist[pre.id][post.id] - inst.dist[pre.id][target.id] - inst.dist[target.id][post.id];
+        return new int[]{capacity_penalty,tw_penalty,dis_penalty,pos};
+    }
+
     public int[] validInsertion(@NotNull Nodes v_in, int pos) {
         // TODO: 2020/4/6 if its feasible return null,if not return penalty
         Nodes pre, post;
@@ -66,8 +98,10 @@ public class Constraints {
                 pre.serviceTime+inst.dist[pre.id][v_in.id],v_in.earlyTime)-Math.min(v_in.lateTime,zrrivalTimesExtended.get(pos+1)-
                 inst.dist[v_in.id][post.id]-v_in.serviceTime),0);
 
+        int dis_penalty = inst.dist[pre.id][v_in.id] + inst.dist[v_in.id][post.id] - inst.dist[pre.id][post.id];
+
         if (capacity_penalty>0||tw_penalty>0){
-            return new int[]{capacity_penalty,tw_penalty,pos};
+            return new int[]{capacity_penalty,dis_penalty,tw_penalty,pos};
         }
 
         else {

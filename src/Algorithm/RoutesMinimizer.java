@@ -14,6 +14,7 @@ public class RoutesMinimizer {
     int[] penalty;
     long startTime;
     double maxTime = 1000000;
+    Operator opt;
 
 
     public RoutesMinimizer(@NotNull Instance inst) {
@@ -28,6 +29,7 @@ public class RoutesMinimizer {
         sol = new Solution(routes);
         penalty = new int[inst.n];
         startTime = System.currentTimeMillis();
+        opt = new Operator();
     }
 
     public Solution determineM(){
@@ -35,8 +37,10 @@ public class RoutesMinimizer {
             DeleteRoute();
             sol.calculateCost();
         }
+        sol.routes = new ArrayList<>(this.routes);
         return sol;
     }
+
     public void DeleteRoute() {
         if (routes.size()==0)return;
         int rndIndex = rnd.nextInt(routes.size());
@@ -64,11 +68,13 @@ public class RoutesMinimizer {
                         break;
                     }
                     else {
+                        //coding
+                        p[3] = p[3]*10000 + i;
                         penalty_ls.add(p);
                     }
                 }
             }
-            if (!flag){
+            if (!flag&&penalty_ls.size()>0){
                 flag = squeeze(v_in,penalty_ls);
             }
             if (!flag){
@@ -87,18 +93,46 @@ public class RoutesMinimizer {
     double factor = 0.99;
     public boolean squeeze(Nodes v_in, @NotNull List<int[]> penalty_ls) {
         Solution tmp = new Solution(sol);
-        int []minPenalty=new int[]{Integer.MAX_VALUE,Integer.MAX_VALUE};
+        int []minPenalty=new int[]{Integer.MAX_VALUE>>2,Integer.MAX_VALUE>>2,Integer.MAX_VALUE>>2,-1};
         for (int[] penalty:penalty_ls){
             if (f(minPenalty)> f(penalty)){
                 minPenalty = penalty;
             }
         }
-
-        // TODO: 2020/4/5 finish this
-        return false;
+        //decoding
+        int route_id = minPenalty[3]%10000;
+        int pos = minPenalty[3]/10000;
+        Routes r = routes.get(route_id);
+        r.insert(v_in,pos);
+        sol.calculateCost();
+        double lastPenalty = f(sol.caPenalty,sol.twPenalty);
+        while (lastPenalty != 0){
+            localSearch(r);
+            double currentPenalty = f(sol.caPenalty,sol.twPenalty);
+            if (currentPenalty < lastPenalty){
+                lastPenalty = currentPenalty;
+            }
+            else {
+                break;
+            }
+        }
+        if (lastPenalty==0)return true;
+        else {
+            alpha*=factor;
+            return false;
+        }
     }
+
+    private void localSearch(Routes r) {
+        opt.out_relocate(sol,r);
+    }
+
     public double f(@NotNull int []Penalty){
         return Penalty[0] + alpha * Penalty[1];
+    }
+
+    public double f(int caPenalty,int twPenalty){
+        return caPenalty + alpha*twPenalty;
     }
 
     public double time() {

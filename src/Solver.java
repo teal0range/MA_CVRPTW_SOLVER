@@ -20,10 +20,8 @@ public class Solver {
                 "", ".txt",
                 "TestData"
         );
-        long t1 = System.currentTimeMillis();
         preparePaths(param);
         ArrayList<Instance> instances = readInstances(param);
-        System.out.println(System.currentTimeMillis()-t1);
         for (Instance instance:instances){
             RoutesMinimizer rtm = new RoutesMinimizer(instance);
             rtm.determineM();
