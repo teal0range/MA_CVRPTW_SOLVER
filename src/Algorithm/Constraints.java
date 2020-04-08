@@ -16,6 +16,7 @@ public class Constraints {
     public ArrayList<Integer> zrrivalTimesExtended;
     public ArrayList<Integer> zrrivalTimes;
     public ArrayList<Integer> backTw;
+    public int distanceTraveled;
     public int currentWeight;
 
     public Constraints(@NotNull List<Nodes> tour, Instance inst) {
@@ -101,7 +102,7 @@ public class Constraints {
         int dis_penalty = inst.dist[pre.id][v_in.id] + inst.dist[v_in.id][post.id] - inst.dist[pre.id][post.id];
 
         if (capacity_penalty>0||tw_penalty>0){
-            return new int[]{capacity_penalty,dis_penalty,tw_penalty,pos};
+            return new int[]{capacity_penalty,tw_penalty,dis_penalty,pos};
         }
 
         else {
@@ -176,6 +177,11 @@ public class Constraints {
             backTw.set(0,backTw.get(1));
             zrrivalTimesExtended.set(0,Math.min(node.lateTime,zrrivalTimes.get(0)));
         }
+        distanceTraveled+=inst.dist[inst.nodes[0].id][tour.get(0).id];
+        for (int i=1;i<tour.size();i++){
+            distanceTraveled+=inst.dist[tour.get(i-1).id][tour.get(i).id];
+        }
+        distanceTraveled+=inst.dist[inst.nodes[0].id][tour.get(tour.size()-1).id];
     }
 
     public int twPenalty(){

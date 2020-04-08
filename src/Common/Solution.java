@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Solution {
-    public int cost;
+    public int distance;
     public List<Routes> routes;
     public List<Integer> inFeasibleRoutes;
     public int twPenalty;
@@ -27,7 +27,9 @@ public class Solution {
     }
 
     public Solution(@NotNull Solution solution) {
-        this.cost = solution.cost;
+        this.timeCost = solution.timeCost;
+        this.scheduleTime = solution.scheduleTime;
+        this.distance = solution.distance;
         this.twPenalty = solution.twPenalty;
         this.caPenalty = solution.caPenalty;
         this.inFeasibleRoutes = new ArrayList<>();
@@ -53,6 +55,7 @@ public class Solution {
         caPenalty = 0;
         timeCost = 0;
         scheduleTime = 0;
+        distance = 0;
         Iterator<Routes> iter = routes.iterator();
         while (iter.hasNext()) {
             Routes r = iter.next();
@@ -60,10 +63,20 @@ public class Solution {
                 iter.remove();
                 continue;
             }
+            distance+=r.cons.distanceTraveled;
             twPenalty+=r.cons.twPenalty();
             caPenalty+=r.cons.caPenalty();
             timeCost+=r.cons.timeCost();
             scheduleTime=Math.max(scheduleTime,r.cons.timeCost());
         }
+    }
+
+    @Override
+    public String toString() {
+        int size = 0;
+        for (Routes r:routes){
+            size+=r.size();
+        }
+        return "size > "+size;
     }
 }

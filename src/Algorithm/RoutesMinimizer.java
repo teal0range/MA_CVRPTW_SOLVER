@@ -35,7 +35,9 @@ public class RoutesMinimizer {
     public Solution determineM(){
         while (!timeIsUp()){
             DeleteRoute();
+            System.out.println(sol);
             sol.calculateCost();
+            if (routes.size()==10)break;
         }
         sol.routes = new ArrayList<>(this.routes);
         return sol;
@@ -68,8 +70,8 @@ public class RoutesMinimizer {
                         break;
                     }
                     else {
-                        //coding
-                        p[3] = p[3]*10000 + i;
+                        //encoding
+                        p[3] = encoding(p[3],i);
                         penalty_ls.add(p);
                     }
                 }
@@ -100,15 +102,15 @@ public class RoutesMinimizer {
             }
         }
         //decoding
-        int route_id = minPenalty[3]%10000;
-        int pos = minPenalty[3]/10000;
-        Routes r = routes.get(route_id);
+        int route_id = decoding(minPenalty[3])[1];
+        int pos = decoding(minPenalty[3])[0];
+        Routes r = tmp.routes.get(route_id);
         r.insert(v_in,pos);
-        sol.calculateCost();
-        double lastPenalty = f(sol.caPenalty,sol.twPenalty);
+        tmp.calculateCost();
+        double lastPenalty = f(tmp.caPenalty,tmp.twPenalty);
         while (lastPenalty != 0){
-            localSearch(r);
-            double currentPenalty = f(sol.caPenalty,sol.twPenalty);
+            localSearch(tmp,r);
+            double currentPenalty = f(tmp.caPenalty,tmp.twPenalty);
             if (currentPenalty < lastPenalty){
                 lastPenalty = currentPenalty;
             }
@@ -116,15 +118,26 @@ public class RoutesMinimizer {
                 break;
             }
         }
-        if (lastPenalty==0)return true;
+        if (lastPenalty==0){
+            sol = tmp;
+            this.routes = tmp.routes;
+            return true;
+        }
         else {
             alpha*=factor;
             return false;
         }
     }
 
-    private void localSearch(Routes r) {
-        opt.out_relocate(sol,r);
+    public static int encoding(int a,int b){
+        return a*10000 + b;
+    }
+    public static int[] decoding(int code){
+        return new int[]{code/10000,code%10000};
+    }
+
+    private void localSearch(Solution tmp,Routes r) {
+        opt.out_relocate(tmp,r);
     }
 
     public double f(@NotNull int []Penalty){

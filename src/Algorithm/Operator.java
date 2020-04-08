@@ -1,12 +1,9 @@
 package Algorithm;
 
-import Common.Instance;
 import Common.Nodes;
 import Common.Solution;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 public class Operator {
@@ -25,25 +22,26 @@ public class Operator {
     }
 
     private void out_relocate(@NotNull List<Routes> routes, Routes route) {
-        //搜索外界能插入的点
+        //搜索外界能插入的点这里可能有潜在bug
         for (Routes r:routes){
             if (r==route)continue;
+            out:
             for (int outer=0;outer < r.size();outer++){
                 for (int inner = 0;inner <= route.size();inner++){
                     if (inner!=route.size()&&!route.inst.isClose[r.get(outer).id][route.get(inner).id])continue;
                     int []p = route.cons.validInsertion(r.get(outer),inner);
                     int []q = r.cons.validRemove(outer);
-                    if (!(p==null||p[2]+q[2]>=0&&!r.isFeasible()))continue;
+                    if (!(p==null||p[2]+q[2]>=0&& !r.isFeasible()))continue;
                     route.insert(r.get(outer),inner);
                     r.remove(outer);
-                    if (outer >= r.size())break;
+                    if (outer >= r.size())break out;
                 }
             }
         }
         //搜索能插入邻近路线的点
-        out:
         for (int inner=0;inner<route.size();inner++){
             Nodes node = route.get(inner);
+            outIn:
             for (Routes r:routes){
                 if (r==route)continue;
                 for (int outer = 0;outer<=r.size();outer++){
@@ -53,12 +51,12 @@ public class Operator {
                     if (!(p==null||p[2]+q[2]>=0&&!route.isFeasible()))continue;
                     r.insert(node,outer);
                     route.remove(inner);
-                    if (inner >= route.size())break out;
+                    break outIn;
                 }
             }
         }
     }
-    public void out_relocate(Solution sol,Routes routes) {
+    public void out_relocate(@NotNull Solution sol, Routes routes) {
         out_relocate(sol.routes,routes);
         sol.calculateCost();
     }

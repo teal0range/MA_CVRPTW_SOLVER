@@ -1,6 +1,5 @@
 package Algorithm;
 
-import Algorithm.Constraints;
 import Common.Instance;
 import Common.Nodes;
 import org.jetbrains.annotations.NotNull;
@@ -64,7 +63,7 @@ public class Routes {
         checkFeasibility();
     }
 
-    public void removeIter(Iterator<Nodes> iter){
+    public void removeIter(@NotNull Iterator<Nodes> iter){
         iter.remove();
         cons = new Constraints(tour,inst);
         checkFeasibility();

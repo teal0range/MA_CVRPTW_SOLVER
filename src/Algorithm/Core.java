@@ -1,8 +1,6 @@
 package Algorithm;
 
 import Common.*;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -41,7 +39,7 @@ public class Core extends Thread {
                 }
                 repair(s);
                 localSearch(s);
-                if (s.cost < s_best.cost) {
+                if (s.distance < s_best.distance) {
                     nonImprove = 0;
                     s_best = s;
                 }
