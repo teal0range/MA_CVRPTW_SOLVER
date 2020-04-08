@@ -41,22 +41,33 @@ public class Constraints {
         UpdateInfo();
     }
 
-    public int maxRemains(){
+    public int maxRemains() {
         return inst.Capacity - currentWeight;
     }
 
     public int[] validSwap() {
+        // TODO: 2020/4/8 finish this
         return null;
     }
 
-    public int[] validRemove(int pos){
+    public int[] validConnect() {
+        // TODO: 2020/4/8 finish this
+        return null;
+    }
+
+    public int[] validChange() {
+        // TODO: 2020/4/8 finish this
+        return null;
+    }
+
+    public int[] validRemove(int pos) {
         Nodes target = tour.get(pos);
         Nodes pre, post;
-        int capacity_penalty=0;
-        if (maxRemains()<0){
-            capacity_penalty -= Math.max(tour.get(pos).demands,-maxRemains());
+        int capacity_penalty = 0;
+        if (maxRemains() < 0) {
+            capacity_penalty -= Math.max(tour.get(pos).demands, -maxRemains());
         }
-        if (pos == 0 && pos==tour.size()-1){
+        if (pos == 0 && pos == tour.size() - 1) {
             pre = inst.nodes[0];
             post = inst.nodes[0];
         }

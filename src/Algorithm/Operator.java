@@ -62,7 +62,9 @@ public class Operator {
     }
 
     public void out_relocate(Solution sol) {
-
+        for (int i = 0; i < sol.routes.size(); i++) {
+            out_relocate(sol, sol.routes.get(i));
+        }
     }
 
     public void out_exchange(Solution sol) {
