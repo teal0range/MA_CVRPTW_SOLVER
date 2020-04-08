@@ -1,6 +1,7 @@
 package Algorithm;
 
 import Common.*;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -35,7 +36,6 @@ public class RoutesMinimizer {
     public Solution determineM(){
         while (!timeIsUp()){
             DeleteRoute();
-            System.out.println(sol);
             sol.calculateCost();
             if (routes.size()==10)break;
         }
@@ -63,15 +63,13 @@ public class RoutesMinimizer {
                 // TODO: 2020/4/5 needs optimize
                 for (int pos = rin.nextInt();rin.hasNext();pos=rin.nextInt()){
                     int []p = rt.cons.validInsertion(v_in,pos);
-                    if (p==null) {
+                    if (p[0] == 0 && p[1] == 0) {
                         flag = true;
-                        rt.insert(v_in,pos);
+                        rt.insert(v_in, pos);
 //                        System.out.println("Insert > "+v_in.id +" > "+ i + " > pos > " +pos);
                         break;
-                    }
-                    else {
-                        //encoding
-                        p[3] = encoding(p[3],i);
+                    } else {
+                        p[3] = encoding(p[3], i);
                         penalty_ls.add(p);
                     }
                 }
@@ -96,56 +94,59 @@ public class RoutesMinimizer {
     public boolean squeeze(Nodes v_in, @NotNull List<int[]> penalty_ls) {
         Solution tmp = new Solution(sol);
         int []minPenalty=new int[]{Integer.MAX_VALUE>>2,Integer.MAX_VALUE>>2,Integer.MAX_VALUE>>2,-1};
-        for (int[] penalty:penalty_ls){
-            if (f(minPenalty)> f(penalty)){
+        for (int[] penalty : penalty_ls) {
+            if (f(minPenalty) > f(penalty)) {
                 minPenalty = penalty;
             }
         }
-        //decoding
         int route_id = decoding(minPenalty[3])[1];
         int pos = decoding(minPenalty[3])[0];
         Routes r = tmp.routes.get(route_id);
-        r.insert(v_in,pos);
+        r.insert(v_in, pos);
         tmp.calculateCost();
-        double lastPenalty = f(tmp.caPenalty,tmp.twPenalty);
-        while (lastPenalty != 0){
-            localSearch(tmp,r);
-            double currentPenalty = f(tmp.caPenalty,tmp.twPenalty);
-            if (currentPenalty < lastPenalty){
+        double lastPenalty = f(tmp.caPenalty, tmp.twPenalty);
+        int non_improve = 0, threshold = 2;
+        while (lastPenalty != 0) {
+            localSearch(tmp, r);
+            double currentPenalty = f(tmp.caPenalty, tmp.twPenalty);
+            if (currentPenalty < lastPenalty) {
                 lastPenalty = currentPenalty;
-            }
-            else {
+            } else if (non_improve < threshold) {
+                non_improve++;
+            } else {
                 break;
             }
         }
-        if (lastPenalty==0){
+        if (lastPenalty == 0) {
             sol = tmp;
             this.routes = tmp.routes;
             return true;
-        }
-        else {
-            alpha*=factor;
+        } else {
+            alpha *= factor;
             return false;
         }
     }
 
-    public static int encoding(int a,int b){
-        return a*10000 + b;
-    }
-    public static int[] decoding(int code){
-        return new int[]{code/10000,code%10000};
+    public static int encoding(int a, int b) {
+        return (a << 16) + b;
     }
 
-    private void localSearch(Solution tmp,Routes r) {
-        opt.out_relocate(tmp,r);
+    @NotNull
+    @Contract(value = "_ -> new", pure = true)
+    public static int[] decoding(int code) {
+        return new int[]{code >> 16, code % (1 << 16)};
     }
 
-    public double f(@NotNull int []Penalty){
+    private void localSearch(Solution tmp, Routes r) {
+        opt.out_relocate(tmp, r);
+    }
+
+    public double f(@NotNull int[] Penalty) {
         return Penalty[0] + alpha * Penalty[1];
     }
 
-    public double f(int caPenalty,int twPenalty){
-        return caPenalty + alpha*twPenalty;
+    public double f(int caPenalty, int twPenalty) {
+        return caPenalty + alpha * twPenalty;
     }
 
     public double time() {

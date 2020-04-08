@@ -1,8 +1,13 @@
 package Algorithm;
 
-import Common.*;
+import Common.Instance;
+import Common.Result;
+import Common.Solution;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Core extends Thread {
     int N_pop;
@@ -49,11 +54,15 @@ public class Core extends Thread {
         res.sol = findBestSol();
     }
 
+    @Nullable
+    @Contract(pure = true)
     private Solution block_EAX(Solution p1, Solution p2) {
         // TODO: 2020/4/5 finish this
         return null;
     }
 
+    @Nullable
+    @Contract(pure = true)
     private Solution findBestSol() {
         // TODO: 2020/4/5 easy
         return null;
@@ -63,6 +72,8 @@ public class Core extends Thread {
         // TODO: 2020/4/5 finish this
     }
 
+    @Nullable
+    @Contract(pure = true)
     private Solution single_EAX(Solution p1, Solution p2) {
         // TODO: 2020/4/5 finish this
         return null;
@@ -74,6 +85,8 @@ public class Core extends Thread {
     }
 
 
+    @Nullable
+    @Contract(pure = true)
     private Solution construction() {
         // TODO: 2020/4/5 complete this using cheapest insertion
         return null;

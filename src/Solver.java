@@ -1,4 +1,3 @@
-import Algorithm.Core;
 import Algorithm.RoutesMinimizer;
 import Common.AlgoParam;
 import Common.Instance;
@@ -7,7 +6,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
 
 public class Solver {
     public static void main(String[] args) throws FileNotFoundException {
@@ -22,31 +24,31 @@ public class Solver {
         );
         preparePaths(param);
         ArrayList<Instance> instances = readInstances(param);
-        for (Instance instance:instances){
+        for (Instance instance : instances) {
             RoutesMinimizer rtm = new RoutesMinimizer(instance);
             rtm.determineM();
         }
     }
+
     @NotNull
-    static ArrayList<Instance> readInstances(AlgoParam param) throws FileNotFoundException {
+    static ArrayList<Instance> readInstances(@NotNull AlgoParam param) throws FileNotFoundException {
         File data = new File(param.path_data);
 
         Queue<File> que = new LinkedList<>();
-        if(data.isDirectory()) {
+        if (data.isDirectory()) {
             que.offer(data);
         }
 
         ArrayList<File> files = new ArrayList<>();
-        while(!que.isEmpty()){
+        while (!que.isEmpty()) {
             File folder = que.poll();
             File[] tmpFiles = folder.listFiles();
-            for(File file: tmpFiles){
-                if(file.isDirectory()){
+            for (File file : tmpFiles) {
+                if (file.isDirectory()) {
                     que.offer(file);
-                }
-                else {
+                } else {
                     String fname = file.getName();
-                    if(fname.startsWith(param.teston_prefix) && fname.endsWith(param.teston_extension)){
+                    if (fname.startsWith(param.teston_prefix) && fname.endsWith(param.teston_extension)) {
                         files.add(file);
                     }
                 }

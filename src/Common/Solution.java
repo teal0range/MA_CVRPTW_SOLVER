@@ -59,15 +59,15 @@ public class Solution {
         Iterator<Routes> iter = routes.iterator();
         while (iter.hasNext()) {
             Routes r = iter.next();
-            if (r.size()==0){
+            if (r.size() == 0) {
                 iter.remove();
                 continue;
             }
-            distance+=r.cons.distanceTraveled;
-            twPenalty+=r.cons.twPenalty();
-            caPenalty+=r.cons.caPenalty();
-            timeCost+=r.cons.timeCost();
-            scheduleTime=Math.max(scheduleTime,r.cons.timeCost());
+            distance += r.cons.distanceTraveled();
+            twPenalty += r.cons.twPenalty();
+            caPenalty += r.cons.caPenalty();
+            timeCost += r.cons.timeCost();
+            scheduleTime = Math.max(scheduleTime, r.cons.timeCost());
         }
     }
 
