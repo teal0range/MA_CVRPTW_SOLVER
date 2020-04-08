@@ -4,26 +4,26 @@ import Algorithm.Routes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
 public class Solution {
     public int distance;
     public List<Routes> routes;
-    public List<Integer> inFeasibleRoutes;
+    public HashSet<Integer> infeasibleRoutes;
     public int twPenalty;
     public int caPenalty;
     public int timeCost;
     public int scheduleTime;
 
     public Solution() {
-        this.inFeasibleRoutes = new ArrayList<>();
+        this.infeasibleRoutes = new HashSet<>();
     }
 
     public Solution(List<Routes> routes) {
         this.routes = routes;
-        this.inFeasibleRoutes = new ArrayList<>();
+        this.infeasibleRoutes = new HashSet<>();
     }
 
     public Solution(@NotNull Solution solution) {
@@ -32,8 +32,11 @@ public class Solution {
         this.distance = solution.distance;
         this.twPenalty = solution.twPenalty;
         this.caPenalty = solution.caPenalty;
-        this.inFeasibleRoutes = new ArrayList<>();
-        Collections.copy(inFeasibleRoutes, solution.inFeasibleRoutes);
+        this.infeasibleRoutes = new HashSet<>();
+        Iterator<Integer> iter = solution.infeasibleRoutes.iterator();
+        while (iter.hasNext()) {
+            this.infeasibleRoutes.add(iter.next());
+        }
         this.routes = new ArrayList<>(solution.routes.size());
         for (Routes r : solution.routes) {
             this.routes.add(new Routes(r));
@@ -41,13 +44,13 @@ public class Solution {
     }
 
     public void addInFeasible(int i, @NotNull int[] p) {
-        inFeasibleRoutes.add(i);
+        infeasibleRoutes.add(i);
         caPenalty += p[0];
         twPenalty += p[1];
     }
 
-    public void removeInFeasible(int i, int[] p) {
-        inFeasibleRoutes.remove(i);
+    public void removeInFeasible(int i) {
+        infeasibleRoutes.remove(i);
     }
 
     public void calculateCost() {
@@ -57,8 +60,15 @@ public class Solution {
         scheduleTime = 0;
         distance = 0;
         Iterator<Routes> iter = routes.iterator();
+        int index = 0;
         while (iter.hasNext()) {
             Routes r = iter.next();
+            if (r.isFeasible() && infeasibleRoutes.contains(index)) {
+                infeasibleRoutes.remove(index);
+            }
+            if (!r.isFeasible() && !infeasibleRoutes.contains((index))) {
+                infeasibleRoutes.add(index);
+            }
             if (r.size() == 0) {
                 iter.remove();
                 continue;
@@ -68,6 +78,7 @@ public class Solution {
             caPenalty += r.cons.caPenalty();
             timeCost += r.cons.timeCost();
             scheduleTime = Math.max(scheduleTime, r.cons.timeCost());
+            index++;
         }
     }
 

@@ -108,6 +108,11 @@ public class RoutesMinimizer {
         int non_improve = 0, threshold = 2;
         while (lastPenalty != 0) {
             localSearch(tmp, r);
+            Iterator<Integer> iter = tmp.infeasibleRoutes.iterator();
+            if (iter.hasNext()) {
+                int next = iter.next();
+                r = tmp.routes.get(next);
+            }
             double currentPenalty = f(tmp.caPenalty, tmp.twPenalty);
             if (currentPenalty < lastPenalty) {
                 lastPenalty = currentPenalty;
