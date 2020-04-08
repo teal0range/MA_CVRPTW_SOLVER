@@ -1,6 +1,8 @@
 package Algorithm;
 
 import Common.*;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -72,6 +74,7 @@ public class Core extends Thread {
     private void localSearch(Solution s) {
         // TODO: 2020/4/5 finish this
     }
+
 
     private Solution construction() {
         // TODO: 2020/4/5 complete this using cheapest insertion

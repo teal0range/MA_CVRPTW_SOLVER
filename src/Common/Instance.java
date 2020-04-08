@@ -64,4 +64,8 @@ public class Instance {
         }
     }
 
+    @Override
+    public String toString() {
+        return "size > "+this.nodes.length;
+    }
 }

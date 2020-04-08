@@ -3,6 +3,7 @@ import Algorithm.RoutesMinimizer;
 import Common.AlgoParam;
 import Common.Instance;
 import Common.Nodes;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,13 +20,16 @@ public class Solver {
                 "", ".txt",
                 "TestData"
         );
+        long t1 = System.currentTimeMillis();
         preparePaths(param);
         ArrayList<Instance> instances = readInstances(param);
+        System.out.println(System.currentTimeMillis()-t1);
         for (Instance instance:instances){
             RoutesMinimizer rtm = new RoutesMinimizer(instance);
             rtm.determineM();
         }
     }
+    @NotNull
     static ArrayList<Instance> readInstances(AlgoParam param) throws FileNotFoundException {
         File data = new File(param.path_data);
 
@@ -58,6 +62,7 @@ public class Solver {
         }
         return instances;
     }
+    @NotNull
     public static Instance readInstanceVRPTW(File file) throws FileNotFoundException {
         Scanner cin = new Scanner(file);
         Instance inst = new Instance();

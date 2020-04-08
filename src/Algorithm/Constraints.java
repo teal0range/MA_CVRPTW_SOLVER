@@ -144,6 +144,18 @@ public class Constraints {
         }
     }
 
+    public int twPenalty(){
+        return frontTw.get(frontTw.size()-1);
+    }
+
+    public int caPenalty(){
+        return Math.max(0,-maxRemains());
+    }
+
+    public int timeCost(){
+        return arrivalTimesExtended.get(arrivalTimesExtended.size()-1);
+    }
+
     public boolean checkTimeWindowConstraint() {
         return frontTw.get(frontTw.size()-1)==0;
     }

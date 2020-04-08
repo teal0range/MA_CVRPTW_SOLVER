@@ -33,14 +33,16 @@ public class RoutesMinimizer {
     public Solution determineM(){
         while (!timeIsUp()){
             DeleteRoute();
+            sol.calculateCost();
         }
         return sol;
     }
     public void DeleteRoute() {
+        if (routes.size()==0)return;
         int rndIndex = rnd.nextInt(routes.size());
         Routes r = routes.get(rndIndex);
         EP.addAll(r.tour);
-        System.out.println(r.tour.toString());
+//        System.out.println(r.tour.toString());
         routes.remove(rndIndex);
         RandomIndex ri = new RandomIndex(routes.size());
         Arrays.fill(penalty, 1);
@@ -58,7 +60,7 @@ public class RoutesMinimizer {
                     if (p==null) {
                         flag = true;
                         rt.insert(v_in,pos);
-                        System.out.println("Insert > "+v_in.id +" > "+ i + " > pos > " +pos);
+//                        System.out.println("Insert > "+v_in.id +" > "+ i + " > pos > " +pos);
                         break;
                     }
                     else {
@@ -82,9 +84,9 @@ public class RoutesMinimizer {
         // TODO: 2020/4/6 finish this
     }
     double alpha = 1;
+    double factor = 0.99;
     public boolean squeeze(Nodes v_in, @NotNull List<int[]> penalty_ls) {
         Solution tmp = new Solution(sol);
-        double factor = 0.99;
         int []minPenalty=new int[]{Integer.MAX_VALUE,Integer.MAX_VALUE};
         for (int[] penalty:penalty_ls){
             if (f(minPenalty)> f(penalty)){
