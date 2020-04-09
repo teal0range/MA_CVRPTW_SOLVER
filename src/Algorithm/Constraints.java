@@ -56,23 +56,22 @@ public class Constraints {
 
     public int[] validConnect(int front, @NotNull Routes tail, int back) {
         //front 从-1取到tour.size()-1
-        //back 从0取到tour.size()
+        //back 从0取到tail.size()
         // TODO: 2020/4/8 未测试
         int totalDemands = this.currentWeight.get(front + 1) +
-                this.currentWeight.get(this.currentWeight.size() - 1)
-                - this.currentWeight.get(back);
+                tail.cons.currentWeight.get(tail.cons.currentWeight.size() - 1)
+                - tail.cons.currentWeight.get(back);
         int capacity_penalty = Math.min(inst.Capacity - totalDemands, 0);
-        int totalDis = tail.cons.distanceTraveled.get(front + 1) +
+        int totalDis = this.distanceTraveled.get(front + 1) +
                 tail.cons.distanceTraveled.get(tail.cons.distanceTraveled.size() - 1)
                 - tail.cons.distanceTraveled.get(back);
         int dis_penalty = totalDis - this.distanceTraveled();
+        Nodes frontNode = front == -1 ? inst.nodes[0] : tour.get(front);
+        Nodes backNode = back == tail.size() ? inst.nodes[0] : tail.get(back);
         int tw_Penalty = this.frontTw.get(front + 1) + tail.cons.backTw.get(back + 1) +
-                Math.max(this.arrivalTimesExtended.get(front + 1) + tour.get(front).serviceTime +
-                        inst.dist[tour.get(front).id][tail.get(back).id] - tail.get(back).lateTime, 0);
-        if (capacity_penalty > 0 || tw_Penalty > 0) return new int[]{capacity_penalty, tw_Penalty, dis_penalty, front};
-        else {
-            return null;
-        }
+                Math.max(this.arrivalTimesExtended.get(front + 1) + frontNode.serviceTime +
+                        inst.dist[frontNode.id][backNode.id] - backNode.lateTime, 0);
+        return new int[]{capacity_penalty, tw_Penalty, dis_penalty, front};
     }
 
     public int[] validChange() {

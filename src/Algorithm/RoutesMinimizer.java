@@ -36,7 +36,6 @@ public class RoutesMinimizer {
     public Solution determineM(){
         while (!timeIsUp()){
             DeleteRoute();
-            sol.calculateCost();
             if (routes.size()==10)break;
         }
         sol.routes = new ArrayList<>(this.routes);
@@ -50,6 +49,7 @@ public class RoutesMinimizer {
         EP.addAll(r.tour);
 //        System.out.println(r.tour.toString());
         routes.remove(rndIndex);
+        sol.calculateCost();
         RandomIndex ri = new RandomIndex(routes.size());
         Arrays.fill(penalty, 1);
         while (!EP.isEmpty() && !timeIsUp()) {
@@ -66,6 +66,7 @@ public class RoutesMinimizer {
                     if (p[0] == 0 && p[1] == 0) {
                         flag = true;
                         rt.insert(v_in, pos);
+                        sol.calculateCost();
 //                        System.out.println("Insert > "+v_in.id +" > "+ i + " > pos > " +pos);
                         break;
                     } else {
@@ -144,6 +145,7 @@ public class RoutesMinimizer {
 
     private void localSearch(Solution tmp, Routes r) {
         opt.out_relocate(tmp, r);
+        opt.two_opt_star(tmp, r);
     }
 
     public double f(@NotNull int[] Penalty) {

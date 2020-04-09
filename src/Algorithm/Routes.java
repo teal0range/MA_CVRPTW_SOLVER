@@ -46,15 +46,28 @@ public class Routes {
         isFeasible = cons.checkCapacityConstraint() & cons.checkTimeWindowConstraint();
     }
 
-    public void insert(Nodes v_in,int pos){
-        tour.add(pos,v_in);
+    public void connect(int front, @NotNull Routes routes, int back) {
+        ArrayList<Nodes> result = new ArrayList<>(front + 1 + routes.size() - back);
+        for (int i = 0; i <= front; i++) {
+            result.add(tour.get(i));
+        }
+        for (int i = back; i < routes.size(); i++) {
+            result.add(routes.get(i));
+        }
+        this.tour = result;
+        this.cons = new Constraints(tour, inst);
+    }
+
+    public void insert(Nodes v_in, int pos) {
+        tour.add(pos, v_in);
         // TODO: 2020/4/6 need optimize
-        cons = new Constraints(tour,inst);
+        cons = new Constraints(tour, inst);
         checkFeasibility();
     }
-    public void remove(Nodes v_out){
+
+    public void remove(Nodes v_out) {
         tour.remove(v_out);
-        cons = new Constraints(tour,inst);
+        cons = new Constraints(tour, inst);
         checkFeasibility();
     }
     public void remove(int index){

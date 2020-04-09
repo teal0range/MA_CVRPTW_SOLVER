@@ -11,11 +11,15 @@ public class Operator {
     // TODO: 2020/4/5 complete the opts
     public void two_opt_star(@NotNull Solution sol, Routes r) {
         for (int i = 0; i < sol.routes.size(); i++) {
-            two_opt_star(r, sol.routes.get(i));
+            if (sol.routes.get(i) == r) continue;
+            if (two_opt_star(r, sol.routes.get(i))) {
+                sol.calculateCost();
+            }
         }
     }
 
-    public void two_opt_star(@NotNull Routes route1, Routes route2) {
+    public boolean two_opt_star(@NotNull Routes route1, Routes route2) {
+        boolean flag = false;
         for (int front = -1; front < route1.size(); front++) {
             for (int back = 0; back <= route2.size(); back++) {
                 if (front != -1 && back != route2.size() &&
@@ -23,10 +27,18 @@ public class Operator {
                     continue;
                 int[] p = route1.cons.validConnect(front, route2, back);
                 int[] q = route2.cons.validConnect(back - 1, route1, front + 1);
-                // TODO: 2020/4/8 finish here
-//                if (p!=null||q!=null||p[2]+q[2]>=0&&route1.isFeasible())continue;
+                if ((p[0] + q[0] <= route1.cons.caPenalty() + route2.cons.caPenalty()
+                        && p[1] + q[1] <= route1.cons.twPenalty() + route2.cons.twPenalty()) &&
+                        (p[2] + q[2] < 0 || !route1.isFeasible() || !route2.isFeasible())) {
+                    Routes tmp = new Routes(route1);
+                    route1.connect(front, route2, back);
+                    route2.connect(back - 1, tmp, front + 1);
+                    flag = true;
+                    break;
+                }
             }
         }
+        return flag;
     }
 
     public void in_relocate(Routes route) {
