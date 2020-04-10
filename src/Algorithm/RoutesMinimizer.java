@@ -36,7 +36,7 @@ public class RoutesMinimizer {
     public Solution determineM(){
         while (!timeIsUp()){
             DeleteRoute();
-            if (routes.size()==10)break;
+            if (routes.size() == 5) break;
         }
         sol.routes = new ArrayList<>(this.routes);
         return sol;
@@ -106,7 +106,7 @@ public class RoutesMinimizer {
         r.insert(v_in, pos);
         tmp.calculateCost();
         double lastPenalty = f(tmp.caPenalty, tmp.twPenalty);
-        int non_improve = 0, threshold = 2;
+//        int non_improve = 0, threshold = 2;
         while (lastPenalty != 0) {
             localSearch(tmp, r);
             Iterator<Integer> iter = tmp.infeasibleRoutes.iterator();
@@ -117,8 +117,6 @@ public class RoutesMinimizer {
             double currentPenalty = f(tmp.caPenalty, tmp.twPenalty);
             if (currentPenalty < lastPenalty) {
                 lastPenalty = currentPenalty;
-            } else if (non_improve < threshold) {
-                non_improve++;
             } else {
                 break;
             }
@@ -146,6 +144,7 @@ public class RoutesMinimizer {
     private void localSearch(Solution tmp, Routes r) {
         opt.out_relocate(tmp, r);
         opt.two_opt_star(tmp, r);
+//        opt.in_relocate(tmp,r);
     }
 
     public double f(@NotNull int[] Penalty) {

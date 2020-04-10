@@ -46,6 +46,15 @@ public class Routes {
         isFeasible = cons.checkCapacityConstraint() & cons.checkTimeWindowConstraint();
     }
 
+    public void swap(int src, @NotNull Routes rt, int det) {
+        // TODO: 2020/4/10 待测试
+        Nodes tmp = tour.get(src);
+        tour.set(src, rt.get(det));
+        rt.tour.set(det, tmp);
+        this.cons = new Constraints(tour, inst);
+        rt.cons = new Constraints(tour, inst);
+    }
+
     public void connect(int front, @NotNull Routes routes, int back) {
         ArrayList<Nodes> result = new ArrayList<>(front + 1 + routes.size() - back);
         for (int i = 0; i <= front; i++) {
@@ -70,6 +79,7 @@ public class Routes {
         cons = new Constraints(tour, inst);
         checkFeasibility();
     }
+
     public void remove(int index){
         tour.remove(index);
         cons = new Constraints(tour,inst);

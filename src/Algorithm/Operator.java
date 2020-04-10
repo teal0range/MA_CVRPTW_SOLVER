@@ -9,7 +9,7 @@ import java.util.List;
 public class Operator {
 
     // TODO: 2020/4/5 complete the opts
-    public void two_opt_star(@NotNull Solution sol, Routes r) {
+    public void two_opt_star(@NotNull Solution sol, @NotNull Routes r) {
         for (int i = 0; i < sol.routes.size(); i++) {
             if (sol.routes.get(i) == r) continue;
             if (two_opt_star(r, sol.routes.get(i))) {
@@ -18,7 +18,7 @@ public class Operator {
         }
     }
 
-    public boolean two_opt_star(@NotNull Routes route1, Routes route2) {
+    public boolean two_opt_star(@NotNull Routes route1, @NotNull Routes route2) {
         boolean flag = false;
         for (int front = -1; front < route1.size(); front++) {
             for (int back = 0; back <= route2.size(); back++) {
@@ -41,17 +41,34 @@ public class Operator {
         return flag;
     }
 
-    public void in_relocate(Routes route) {
-
+    public void in_relocate(@NotNull Solution sol, @NotNull Routes route) {
+        // TODO: 2020/4/10 待测试
+        for (int in = 0; in < route.size(); in++) {
+            Nodes v_in = route.get(in);
+            boolean flag = false;
+            for (int pos = 0; pos < in && !flag; pos++) {
+                if (!route.inst.isClose[route.get(pos).id][v_in.id]) continue;
+                int[] p = route.cons.validInsertion(v_in, pos);
+                int[] q = route.cons.validRemove(in);
+                if ((p[0] + q[0] <= route.cons.caPenalty()
+                        && p[1] + q[1] <= route.cons.twPenalty() &&
+                        (p[2] + q[2] < 0 || !route.isFeasible()))) {
+                    route.remove(in);
+                    route.insert(v_in, pos);
+                    flag = true;
+                }
+            }
+        }
+        sol.calculateCost();
     }
 
     public void in_exchange(Routes routes) {
 
     }
 
-    public void out_relocate(@NotNull Solution sol, Routes route) {
+    public void out_relocate(@NotNull Solution sol, @NotNull Routes route) {
         //搜索外界能插入的点
-        // 这里可能有潜在bug(bushi
+        //（求求别出bug了
         List<Routes> routes = sol.routes;
         for (Routes r : routes) {
             if (r == route) continue;
@@ -66,7 +83,6 @@ public class Operator {
                             (p[2] + q[2] < 0 || !r.isFeasible())) {
                         route.insert(r.get(outer), inner);
                         r.remove(outer);
-                        sol.calculateCost();
                         if (outer >= r.size()) break out;
                     }
                 }
@@ -87,15 +103,15 @@ public class Operator {
                             (p[2] + q[2] < 0 || !route.isFeasible())) {
                         r.insert(node, outer);
                         route.remove(inner);
-                        sol.calculateCost();
                         break outIn;
                     }
                 }
             }
         }
+        sol.calculateCost();
     }
 
-    public void out_relocate(Solution sol) {
+    public void out_relocate(@NotNull Solution sol) {
         for (int i = 0; i < sol.routes.size(); i++) {
             out_relocate(sol, sol.routes.get(i));
         }

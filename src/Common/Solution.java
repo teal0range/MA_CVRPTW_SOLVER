@@ -61,14 +61,9 @@ public class Solution {
         distance = 0;
         Iterator<Routes> iter = routes.iterator();
         int index = 0;
+        HashSet<Integer> hs = new HashSet<>();
         while (iter.hasNext()) {
             Routes r = iter.next();
-            if (r.isFeasible() && infeasibleRoutes.contains(index)) {
-                infeasibleRoutes.remove(index);
-            }
-            if (!r.isFeasible() && !infeasibleRoutes.contains((index))) {
-                infeasibleRoutes.add(index);
-            }
             if (r.size() == 0) {
                 iter.remove();
                 continue;
@@ -78,6 +73,13 @@ public class Solution {
             caPenalty += r.cons.caPenalty();
             timeCost += r.cons.timeCost();
             scheduleTime = Math.max(scheduleTime, r.cons.timeCost());
+            index++;
+        }
+        index = 0;
+        for (Routes r : routes) {
+            if (!r.isFeasible()) {
+                hs.add(index);
+            }
             index++;
         }
     }

@@ -42,22 +42,25 @@ public class Constraints {
         backTw.addAll(arrivalTimes);
         distanceTraveled.addAll(arrivalTimes);
         currentWeight.addAll(arrivalTimes);
-        UpdateInfo();
+        if (tour.size() != 0) {
+            UpdateInfo();
+        }
     }
 
     public int maxRemains() {
         return inst.Capacity - currentWeight.get(currentWeight.size() - 1);
     }
 
-    public int[] validSwap() {
-        // TODO: 2020/4/8 finish this
-        return null;
+    public int[] validSwap(int src, @NotNull Routes rt, int det) {
+        // TODO: 2020/4/9 待测试
+        int[] p = validSubstitute(src, rt.get(det));
+        int[] q = rt.cons.validSubstitute(det, tour.get(src));
+        return new int[]{p[0] + q[0], p[1] + q[1], p[2] + q[2], src};
     }
 
     public int[] validConnect(int front, @NotNull Routes tail, int back) {
         //front 从-1取到tour.size()-1
         //back 从0取到tail.size()
-        // TODO: 2020/4/8 未测试
         int totalDemands = this.currentWeight.get(front + 1) +
                 tail.cons.currentWeight.get(tail.cons.currentWeight.size() - 1)
                 - tail.cons.currentWeight.get(back);
@@ -74,9 +77,20 @@ public class Constraints {
         return new int[]{capacity_penalty, tw_Penalty, dis_penalty, front};
     }
 
-    public int[] validChange() {
-        // TODO: 2020/4/8 finish this
-        return null;
+    public int[] validSubstitute(int src, @NotNull Nodes v_in) {
+        // TODO: 2020/4/9 待测试
+        int totalDemands = this.currentWeight.get(currentWeight.size() - 1)
+                - tour.get(src).demands + v_in.demands;
+        int ca_penalty = Math.max(totalDemands - inst.Capacity, 0);
+        Nodes srcPre = src == 0 ? inst.nodes[0] : tour.get(src - 1);
+        Nodes srcNode = tour.get(src);
+        Nodes srcPost = src == tour.size() - 1 ? inst.nodes[0] : tour.get(src + 1);
+        int dis_penalty = -inst.dist[srcPre.id][srcNode.id] -
+                inst.dist[srcPost.id][srcNode.id] + inst.dist[srcPre.id][v_in.id] + inst.dist[srcPost.id][v_in.id];
+        int tw_penalty = frontTw.get(src) + backTw.get(src + 2) +
+                Math.max(Math.max(arrivalTimesExtended.get(src) + srcPre.serviceTime + inst.dist[srcPre.id][v_in.id], v_in.earlyTime),
+                        Math.min(srcPost.lateTime, zrrivalTimesExtended.get(src + 2) - v_in.serviceTime - inst.dist[srcPost.id][v_in.id]));
+        return new int[]{ca_penalty, tw_penalty, dis_penalty, src};
     }
 
     public int[] validRemove(int pos) {
@@ -138,6 +152,7 @@ public class Constraints {
     }
 
     public void UpdateInfo() {
+        // TODO: 2020/4/9 这里需要优化
         int lastNode = 0, lastNodeServiceTime = inst.nodes[0].serviceTime;
         arrivalTimes.set(0,inst.nodes[0].earlyTime);
         arrivalTimesExtended.set(0,inst.nodes[0].earlyTime);
