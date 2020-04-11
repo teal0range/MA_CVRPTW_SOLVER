@@ -16,7 +16,7 @@ public class Solver {
         AlgoParam param = new AlgoParam(
                 "VRPTW",
                 "181870063",
-                "Guo Junjie",
+                "Isolostar",
                 "EAMA",
                 60,
                 "", ".txt",
@@ -26,6 +26,7 @@ public class Solver {
         ArrayList<Instance> instances = readInstances(param);
         for (Instance instance : instances) {
             RoutesMinimizer rtm = new RoutesMinimizer(instance);
+            System.out.print(instance.instName + " > ");
             rtm.determineM();
         }
     }

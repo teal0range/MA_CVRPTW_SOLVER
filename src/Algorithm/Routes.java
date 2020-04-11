@@ -52,7 +52,8 @@ public class Routes {
         tour.set(src, rt.get(det));
         rt.tour.set(det, tmp);
         this.cons = new Constraints(tour, inst);
-        rt.cons = new Constraints(tour, inst);
+        rt.cons = new Constraints(rt.tour, inst);
+        checkFeasibility();
     }
 
     public void connect(int front, @NotNull Routes routes, int back) {
@@ -65,6 +66,7 @@ public class Routes {
         }
         this.tour = result;
         this.cons = new Constraints(tour, inst);
+        checkFeasibility();
     }
 
     public void insert(Nodes v_in, int pos) {

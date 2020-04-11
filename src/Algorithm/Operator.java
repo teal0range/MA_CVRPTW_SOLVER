@@ -4,6 +4,7 @@ import Common.Nodes;
 import Common.Solution;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Operator {
@@ -12,13 +13,13 @@ public class Operator {
     public void two_opt_star(@NotNull Solution sol, @NotNull Routes r) {
         for (int i = 0; i < sol.routes.size(); i++) {
             if (sol.routes.get(i) == r) continue;
-            if (two_opt_star(r, sol.routes.get(i))) {
+            if (two_opt_star(r, sol.routes.get(i), Integer.MAX_VALUE, 0)) {
                 sol.calculateCost();
             }
         }
     }
 
-    public boolean two_opt_star(@NotNull Routes route1, @NotNull Routes route2) {
+    public boolean two_opt_star(@NotNull Routes route1, @NotNull Routes route2, int cnt, int threshold) {
         boolean flag = false;
         for (int front = -1; front < route1.size(); front++) {
             for (int back = 0; back <= route2.size(); back++) {
@@ -29,14 +30,22 @@ public class Operator {
                 int[] q = route2.cons.validConnect(back - 1, route1, front + 1);
                 if ((p[0] + q[0] <= route1.cons.caPenalty() + route2.cons.caPenalty()
                         && p[1] + q[1] <= route1.cons.twPenalty() + route2.cons.twPenalty()) &&
-                        (p[2] + q[2] < 0 || !route1.isFeasible() || !route2.isFeasible())) {
+                        (p[2] + q[2] < threshold || !route1.isFeasible() || !route2.isFeasible())) {
                     Routes tmp = new Routes(route1);
                     route1.connect(front, route2, back);
-                    route2.connect(back - 1, tmp, front + 1);
+                    try {
+                        route2.connect(back - 1, tmp, front + 1);
+                    } catch (Exception e) {
+                        System.out.println();
+                    }
                     flag = true;
+                    if (--cnt == 0) {
+                        return true;
+                    }
                     break;
                 }
             }
+
         }
         return flag;
     }
@@ -66,10 +75,17 @@ public class Operator {
 
     }
 
-    public void out_relocate(@NotNull Solution sol, @NotNull Routes route) {
+    public void out_relocate(Solution sol, Routes routes) {
+        out_relocate(sol, routes, Integer.MAX_VALUE, 0);
+    }
+
+    public void out_relocate(@NotNull Solution sol, @NotNull Routes route, int cnt, int threshold) {
         //搜索外界能插入的点
         //（求求别出bug了
         List<Routes> routes = sol.routes;
+        if (threshold != 0) {
+            Collections.shuffle(routes);
+        }
         for (Routes r : routes) {
             if (r == route) continue;
             out:
@@ -80,9 +96,13 @@ public class Operator {
                     int[] q = r.cons.validRemove(outer);
                     if ((p[0] + q[0] <= r.cons.caPenalty() + route.cons.caPenalty()
                             && p[1] + q[1] <= r.cons.twPenalty() + route.cons.twPenalty()) &&
-                            (p[2] + q[2] < 0 || !r.isFeasible())) {
+                            (p[2] + q[2] < threshold || !r.isFeasible())) {
                         route.insert(r.get(outer), inner);
                         r.remove(outer);
+                        if (--cnt == 0) {
+                            sol.calculateCost();
+                            return;
+                        }
                         if (outer >= r.size()) break out;
                     }
                 }
@@ -93,16 +113,20 @@ public class Operator {
             Nodes node = route.get(inner);
             outIn:
             for (Routes r : routes) {
-                if (r == route) continue;
+                if (r == route || r.size() == 0) continue;
                 for (int outer = 0; outer <= r.size(); outer++) {
                     if (outer != r.size() && !route.inst.isClose[node.id][r.get(outer).id]) continue;
                     int[] p = r.cons.validInsertion(node, outer);
                     int[] q = route.cons.validRemove(inner);
                     if ((p[0] + q[0] <= r.cons.caPenalty() + route.cons.caPenalty()
                             && p[1] + q[1] <= r.cons.twPenalty() + route.cons.twPenalty()) &&
-                            (p[2] + q[2] < 0 || !route.isFeasible())) {
+                            (p[2] + q[2] < threshold || !route.isFeasible())) {
                         r.insert(node, outer);
                         route.remove(inner);
+                        if (--cnt == 0) {
+                            sol.calculateCost();
+                            return;
+                        }
                         break outIn;
                     }
                 }
@@ -113,12 +137,37 @@ public class Operator {
 
     public void out_relocate(@NotNull Solution sol) {
         for (int i = 0; i < sol.routes.size(); i++) {
-            out_relocate(sol, sol.routes.get(i));
+            out_relocate(sol, sol.routes.get(i), Integer.MAX_VALUE, 0);
         }
     }
 
     public void out_exchange(Solution sol) {
 
+    }
+
+    public boolean out_exchange(@NotNull Routes r1, @NotNull Routes r2) {
+        return out_exchange(r1, r2, Integer.MAX_VALUE, 0);
+    }
+
+    public boolean out_exchange(@NotNull Routes r1, @NotNull Routes r2, int cnt, int threshold) {
+        boolean flag = false;
+        for (int i = 0; i < r1.size(); i++) {
+            for (int j = 0; j < r2.size(); j++) {
+                if (!r1.inst.isClose[r1.get(i).id][r2.get(j).id]) continue;
+                int[] p = r1.cons.validSwap(i, r2, j);
+                if ((p[0] <= r1.cons.caPenalty() + r2.cons.caPenalty()
+                        && p[1] <= r1.cons.twPenalty() + r2.cons.twPenalty()) && (p[2] < threshold ||
+                        !r1.isFeasible() || !r2.isFeasible())) {
+                    r1.swap(i, r2, j);
+                    flag = true;
+                    if (--cnt == 0) {
+                        return true;
+                    }
+                    break;
+                }
+            }
+        }
+        return flag;
     }
 
 }

@@ -14,7 +14,7 @@ public class RoutesMinimizer {
     Stack<Nodes> EP;
     int[] penalty;
     long startTime;
-    double maxTime = 1000000;
+    double maxTime = 5;
     Operator opt;
 
 
@@ -38,26 +38,41 @@ public class RoutesMinimizer {
         for (int i = 1; i < 20; i++) {
             routes1.insert(inst.nodes[i], 0);
         }
-        int[] ls = new int[]{1};
-        for (int i = ls.length - 1; i >= 0; i--) {
-            routes1.remove(ls[i]);
+        Routes routes2 = sol.routes.get(1);
+        for (int i = 21; i < 60; i++) {
+            routes2.insert(inst.nodes[i], 0);
         }
-        return;
+        for (int i = 0; i < routes1.size(); i++) {
+            for (int j = 0; j < routes1.size(); j++) {
+                int[] p = routes1.cons.validSwap(i, routes2, j);
+                Routes r1 = new Routes(routes1);
+                Routes r2 = new Routes(routes2);
+                r1.swap(i, r2, j);
+                if (p[1] != r1.cons.twPenalty() + r2.cons.twPenalty()) {
+                    System.out.println();
+                }
+            }
+
+        }
     }
 
     public Solution determineM() {
-        long t1 = System.currentTimeMillis();
         while (!timeIsUp()) {
+            Solution tp = new Solution(sol);
             DeleteRoute();
-            if (routes.size() == 5) break;
+            if (!EP.isEmpty()) {
+                sol = tp;
+                routes = tp.routes;
+                EP.empty();
+            }
         }
-        System.out.println(System.currentTimeMillis() - t1);
         sol.routes = new ArrayList<>(this.routes);
+        System.out.println(sol.routes.size() + " > " + ValidChecker.check(sol));
         return sol;
     }
 
     public void DeleteRoute() {
-        if (routes.size()==0)return;
+        if (routes.size() == 0) return;
         int rndIndex = rnd.nextInt(routes.size());
         Routes r = routes.get(rndIndex);
         EP.addAll(r.tour);
@@ -65,18 +80,18 @@ public class RoutesMinimizer {
         routes.remove(rndIndex);
         sol.calculateCost();
         Arrays.fill(penalty, 1);
-        while (!EP.isEmpty() && !timeIsUp()) {
+        long st = System.currentTimeMillis();
+        while (!EP.isEmpty() && !timeIsUp(st, 1)) {
             RandomIndex ri = new RandomIndex(routes.size());
             Nodes v_in = EP.pop();
             boolean flag = false;
             List<int[]> penalty_ls = new LinkedList<>();
-            while (!flag&&ri.hasNext()) {
+            while (!flag && ri.hasNext()) {
                 int i = ri.nextInt();
                 Routes rt = routes.get(i);
-                RandomIndex rin = new RandomIndex(rt.size()+1);
-                // TODO: 2020/4/5 needs optimize
-                for (int pos = rin.nextInt();rin.hasNext();pos=rin.nextInt()){
-                    int []p = rt.cons.validInsertion(v_in,pos);
+                RandomIndex rin = new RandomIndex(rt.size() + 1);
+                for (int pos = rin.nextInt(); rin.hasNext(); pos = rin.nextInt()) {
+                    int[] p = rt.cons.validInsertion(v_in, pos);
                     if (p[0] == 0 && p[1] == 0) {
                         flag = true;
                         rt.insert(v_in, pos);
@@ -95,13 +110,42 @@ public class RoutesMinimizer {
             if (!flag){
                 penalty[v_in.id]++;
                 insertion_ejection(v_in, 5);
+                flag = true;
             }
-            perturb();
+            perturb(1000);
         }
     }
 
-    private void perturb() {
+    private void perturb(int I_max) {
         // TODO: 2020/4/6 finish this
+        for (int i = 0; i < I_max; i += 10) {
+            int c = rnd.nextInt(3);
+            switch (c) {
+                case 0:
+                    opt.out_relocate(sol, sol.routes.get(rnd.nextInt(sol.routes.size())),
+                            10, sol.distance / 50);
+                case 1: {
+                    Routes r1 = sol.routes.get(rnd.nextInt(sol.routes.size()));
+                    Routes r2 = sol.routes.get(rnd.nextInt(sol.routes.size()));
+                    while (r1 == r2) {
+                        r2 = sol.routes.get(rnd.nextInt(sol.routes.size()));
+                    }
+                    if (opt.two_opt_star(r1, r2, 10, sol.distance / 50)) {
+                        sol.calculateCost();
+                    }
+                }
+                case 2: {
+                    Routes r1 = sol.routes.get(rnd.nextInt(sol.routes.size()));
+                    Routes r2 = sol.routes.get(rnd.nextInt(sol.routes.size()));
+                    while (r1 == r2) {
+                        r2 = sol.routes.get(rnd.nextInt(sol.routes.size()));
+                    }
+                    if (opt.out_exchange(r1, r2, 10, sol.distance / 50)) {
+                        sol.calculateCost();
+                    }
+                }
+            }
+        }
     }
 
 
@@ -110,14 +154,13 @@ public class RoutesMinimizer {
         int pSumMin = Integer.MAX_VALUE;
         Routes bestRoute = routes.get(0);
         int bestInsertionPos = -1;
-        int bestEjectionNum = 0;
+        int bestRemoveLeft = 0;
         int bestDisPenalty = 0;
         //找到最优插入剔除组合
         for (Routes r : sol.routes) {
             out:
             for (int insertion_pos = 1; insertion_pos <= r.size(); insertion_pos++) {
                 int pSum = 0;
-                int ejectionNum = 0;
                 r.insert(v_in, insertion_pos);
                 for (int removeLeft = insertion_pos - 2; removeLeft >= -1 && removeLeft >= insertion_pos - kMax - 1; removeLeft--) {
                     int[] p = r.cons.validConnect(removeLeft, r, insertion_pos);
@@ -126,13 +169,12 @@ public class RoutesMinimizer {
                         r.remove(insertion_pos);
                         continue out;
                     }
-                    ejectionNum++;
                     if (p[0] == 0 && p[1] == 0) {
-                        if (pSum < pSumMin || p[2] < bestDisPenalty) {
+                        if (pSum < pSumMin || bestDisPenalty > p[2]) {
                             pSumMin = pSum;
                             bestDisPenalty = p[2];
                             bestInsertionPos = insertion_pos;
-                            bestEjectionNum = insertion_pos - removeLeft - 1;
+                            bestRemoveLeft = removeLeft;
                             bestRoute = r;
                         }
                         r.remove(insertion_pos);
@@ -143,15 +185,12 @@ public class RoutesMinimizer {
             }
         }
         bestRoute.insert(v_in, bestInsertionPos);
-        while (bestEjectionNum-- > 0) {
-            EP.add(bestRoute.get(bestInsertionPos - 1));
-            bestRoute.remove(bestInsertionPos - 1);
+        for (int i = bestRemoveLeft + 1; i < bestInsertionPos; i++) {
+            EP.push(bestRoute.get(i));
         }
+        bestRoute.connect(bestRemoveLeft, bestRoute, bestInsertionPos);
     }
 
-    public void updateBestEjection() {
-
-    }
 
     double alpha = 1;
     double factor = 0.99;
@@ -215,7 +254,7 @@ public class RoutesMinimizer {
     private void localSearch(Solution tmp, Routes r) {
         opt.out_relocate(tmp, r);
         opt.two_opt_star(tmp, r);
-//        opt.in_relocate(tmp,r);
+        opt.in_relocate(tmp, r);
     }
 
     public double f(@NotNull int[] Penalty) {
@@ -230,7 +269,15 @@ public class RoutesMinimizer {
         return (System.currentTimeMillis() - startTime) / 1000.;
     }
 
+    public double time(long startTime) {
+        return (System.currentTimeMillis() - startTime) / 1000.;
+    }
+
     public boolean timeIsUp() {
         return time() > maxTime;
+    }
+
+    public boolean timeIsUp(long startTime, int maxTime) {
+        return time(startTime) > maxTime;
     }
 }

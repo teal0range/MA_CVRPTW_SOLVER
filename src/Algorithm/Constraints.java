@@ -58,7 +58,7 @@ public class Constraints {
         int totalDemands = this.currentWeight.get(front + 1) +
                 tail.cons.currentWeight.get(tail.cons.currentWeight.size() - 1)
                 - tail.cons.currentWeight.get(back);
-        int capacity_penalty = Math.min(inst.Capacity - totalDemands, 0);
+        int capacity_penalty = Math.max(-inst.Capacity + totalDemands, 0);
         int totalDis = this.distanceTraveled.get(front + 1) +
                 tail.cons.distanceTraveled.get(tail.cons.distanceTraveled.size() - 1)
                 - tail.cons.distanceTraveled.get(back);
@@ -67,7 +67,7 @@ public class Constraints {
         Nodes backNode = back == tail.size() ? inst.nodes[0] : tail.get(back);
         int tw_Penalty = this.frontTw.get(front + 1) + tail.cons.backTw.get(back + 1) +
                 Math.max(this.arrivalTimesExtended.get(front + 1) + frontNode.serviceTime +
-                        inst.dist[frontNode.id][backNode.id] - backNode.lateTime, 0);
+                        inst.dist[frontNode.id][backNode.id] - tail.cons.zrrivalTimesExtended.get(back + 1), 0);
         return new int[]{capacity_penalty, tw_Penalty, dis_penalty, front};
     }
 
@@ -82,8 +82,9 @@ public class Constraints {
         int dis_penalty = -inst.dist[srcPre.id][srcNode.id] -
                 inst.dist[srcPost.id][srcNode.id] + inst.dist[srcPre.id][v_in.id] + inst.dist[srcPost.id][v_in.id];
         int tw_penalty = frontTw.get(src) + backTw.get(src + 2) +
-                Math.max(Math.max(arrivalTimesExtended.get(src) + srcPre.serviceTime + inst.dist[srcPre.id][v_in.id], v_in.earlyTime),
-                        Math.min(srcPost.lateTime, zrrivalTimesExtended.get(src + 2) - v_in.serviceTime - inst.dist[srcPost.id][v_in.id]));
+                Math.max(Math.max(arrivalTimesExtended.get(src) + srcPre.serviceTime + inst.dist[srcPre.id][v_in.id],
+                        v_in.earlyTime) - Math.min(v_in.lateTime, zrrivalTimesExtended.get(src + 2)
+                        - v_in.serviceTime - inst.dist[srcPost.id][v_in.id]), 0);
         return new int[]{ca_penalty, tw_penalty, dis_penalty, src};
     }
 
@@ -234,6 +235,6 @@ public class Constraints {
     }
 
     public boolean checkCapacityConstraint() {
-        return maxRemains() > 0;
+        return maxRemains() >= 0;
     }
 }
