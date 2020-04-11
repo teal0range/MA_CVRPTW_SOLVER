@@ -11,10 +11,8 @@ public class Constraints {
     Instance inst;
     List<Nodes> tour;
     public ArrayList<Integer> arrivalTimesExtended;
-    public ArrayList<Integer> arrivalTimes;
     public ArrayList<Integer> frontTw;
     public ArrayList<Integer> zrrivalTimesExtended;
-    public ArrayList<Integer> zrrivalTimes;
     public ArrayList<Integer> backTw;
     public ArrayList<Integer> distanceTraveled;
     public ArrayList<Integer> currentWeight;
@@ -25,23 +23,19 @@ public class Constraints {
         int red = 0;
         int initialCapacity = tour.size() + 2 + red;
         arrivalTimesExtended = new ArrayList<>(initialCapacity);
-        arrivalTimes = new ArrayList<>(initialCapacity);
         frontTw = new ArrayList<>(initialCapacity);
         zrrivalTimesExtended = new ArrayList<>(initialCapacity);
-        zrrivalTimes = new ArrayList<>(initialCapacity);
         backTw = new ArrayList<>(initialCapacity);
         distanceTraveled = new ArrayList<>(initialCapacity);
         currentWeight = new ArrayList<>(initialCapacity);
         for (int i = 0; i < tour.size() + 2; i++) {
             arrivalTimesExtended.add(0);
         }
-        arrivalTimes.addAll(arrivalTimesExtended);
         frontTw.addAll(arrivalTimesExtended);
-        zrrivalTimes.addAll(arrivalTimes);
-        zrrivalTimesExtended.addAll(arrivalTimes);
-        backTw.addAll(arrivalTimes);
-        distanceTraveled.addAll(arrivalTimes);
-        currentWeight.addAll(arrivalTimes);
+        zrrivalTimesExtended.addAll(arrivalTimesExtended);
+        backTw.addAll(arrivalTimesExtended);
+        distanceTraveled.addAll(arrivalTimesExtended);
+        currentWeight.addAll(arrivalTimesExtended);
         if (tour.size() != 0) {
             UpdateInfo();
         }
@@ -154,60 +148,58 @@ public class Constraints {
     public void UpdateInfo() {
         // TODO: 2020/4/9 这里需要优化
         int lastNode = 0, lastNodeServiceTime = inst.nodes[0].serviceTime;
-        arrivalTimes.set(0,inst.nodes[0].earlyTime);
+        int arrivalTimes = inst.nodes[0].earlyTime;
         arrivalTimesExtended.set(0,inst.nodes[0].earlyTime);
         for (int i = 1; i < tour.size() + 1; i++) {
             Nodes node = tour.get(i - 1);
-            arrivalTimes.set(i, arrivalTimesExtended.get(i - 1) + lastNodeServiceTime + inst.dist[lastNode][node.id]);
-            int delta_penalty = arrivalTimes.get(i) - node.lateTime;
-            if (delta_penalty > 0){
-                frontTw.set(i, delta_penalty + frontTw.get(i-1));
-                arrivalTimesExtended.set(i,node.lateTime);
-            }
-            else {
-                frontTw.set(i, frontTw.get(i-1));
-                arrivalTimesExtended.set(i, Math.max(arrivalTimes.get(i), node.earlyTime));
+            arrivalTimes = arrivalTimesExtended.get(i - 1) + lastNodeServiceTime + inst.dist[lastNode][node.id];
+            int delta_penalty = arrivalTimes - node.lateTime;
+            if (delta_penalty > 0) {
+                frontTw.set(i, delta_penalty + frontTw.get(i - 1));
+                arrivalTimesExtended.set(i, node.lateTime);
+            } else {
+                frontTw.set(i, frontTw.get(i - 1));
+                arrivalTimesExtended.set(i, Math.max(arrivalTimes, node.earlyTime));
             }
             lastNode = node.id;
             lastNodeServiceTime = node.serviceTime;
         }
         Nodes node = inst.nodes[0];
-        arrivalTimes.set(tour.size()+1, arrivalTimesExtended.get(tour.size()) + lastNodeServiceTime + inst.dist[lastNode][node.id]);
-        int delta_penalty = arrivalTimes.get(tour.size()+1) - node.lateTime;
-        if (delta_penalty > 0){
-            frontTw.set(tour.size()+1, delta_penalty + frontTw.get(tour.size()));
-            arrivalTimesExtended.set(tour.size()+1,node.lateTime);
-        }
-        else {
-            frontTw.set(tour.size()+1, frontTw.get(tour.size()));
-            arrivalTimesExtended.set(tour.size()+1, Math.max(arrivalTimes.get(tour.size()+1), node.earlyTime));
+        arrivalTimes = arrivalTimesExtended.get(tour.size()) + lastNodeServiceTime + inst.dist[lastNode][node.id];
+        int delta_penalty = arrivalTimes - node.lateTime;
+        if (delta_penalty > 0) {
+            frontTw.set(tour.size() + 1, delta_penalty + frontTw.get(tour.size()));
+            arrivalTimesExtended.set(tour.size() + 1, node.lateTime);
+        } else {
+            frontTw.set(tour.size() + 1, frontTw.get(tour.size()));
+            arrivalTimesExtended.set(tour.size() + 1, Math.max(arrivalTimes, node.earlyTime));
         }
 
         lastNode = 0;
         zrrivalTimesExtended.set(tour.size()+1,inst.nodes[0].lateTime);
-        zrrivalTimes.set(tour.size()+1,zrrivalTimesExtended.get(tour.size()+1));
-        for (int i = tour.size();i>0;i--){
-            node = tour.get(i-1);
-            zrrivalTimes.set(i, zrrivalTimesExtended.get(i + 1) - node.serviceTime - inst.dist[lastNode][node.id]);
-            delta_penalty = node.earlyTime - zrrivalTimes.get(i);
-            if (delta_penalty > 0){
-                backTw.set(i,delta_penalty + backTw.get(i+1));
-                zrrivalTimesExtended.set(i,node.earlyTime);
+        int zrrivalTimes = zrrivalTimesExtended.get(tour.size() + 1);
+        for (int i = tour.size();i>0;i--) {
+            node = tour.get(i - 1);
+            zrrivalTimes = zrrivalTimesExtended.get(i + 1) - node.serviceTime - inst.dist[lastNode][node.id];
+            delta_penalty = node.earlyTime - zrrivalTimes;
+            if (delta_penalty > 0) {
+                backTw.set(i, delta_penalty + backTw.get(i + 1));
+                zrrivalTimesExtended.set(i, node.earlyTime);
             } else {
                 backTw.set(i, backTw.get(i + 1));
-                zrrivalTimesExtended.set(i, Math.min(node.lateTime, zrrivalTimes.get(i)));
+                zrrivalTimesExtended.set(i, Math.min(node.lateTime, zrrivalTimes));
             }
             lastNode = node.id;
         }
         node = inst.nodes[0];
-        zrrivalTimes.set(0, zrrivalTimesExtended.get(1) - node.serviceTime - inst.dist[lastNode][node.id]);
-        delta_penalty = node.earlyTime - zrrivalTimes.get(0);
+        zrrivalTimes = zrrivalTimesExtended.get(1) - node.serviceTime - inst.dist[lastNode][node.id];
+        delta_penalty = node.earlyTime - zrrivalTimes;
         if (delta_penalty > 0) {
             backTw.set(0, delta_penalty + backTw.get(1));
             zrrivalTimesExtended.set(0, node.earlyTime);
         } else {
             backTw.set(0, backTw.get(1));
-            zrrivalTimesExtended.set(0, Math.min(node.lateTime, zrrivalTimes.get(0)));
+            zrrivalTimesExtended.set(0, Math.min(node.lateTime, zrrivalTimes));
         }
         currentWeight.set(1, currentWeight.get(0) + tour.get(0).demands);
         for (int i = 1; i < tour.size(); i++) {
