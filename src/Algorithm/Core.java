@@ -14,6 +14,12 @@ public class Core extends Thread {
     ArrayList<Solution> sigma;
     Result res;
 
+    public Core(int n_pop, int n_ch, Instance inst) {
+        N_pop = n_pop;
+        N_ch = n_ch;
+        this.inst = inst;
+    }
+
     public void run() {
         // TODO: 2020/4/5 need completion
         EAMA(N_pop, N_ch);
@@ -22,10 +28,11 @@ public class Core extends Thread {
     private void EAMA(int n_pop, int n_ch) {
         int maxNonImprove = 100;
         int nonImprove = 0;
-        int m = routeMinimization();
+        RoutesMinimizer rtm = new RoutesMinimizer(inst);
+        int m = rtm.determineM();
         sigma = new ArrayList<>(n_pop);
         for (int i = 0; i < n_pop; i++) {
-            sigma.add(construction());
+            sigma.add(new Solution(rtm.Generate_initial_group()));
         }
         Collections.shuffle(sigma);
         for (int i = 0; i < n_pop; i++) {
@@ -42,6 +49,7 @@ public class Core extends Thread {
                 }
                 repair(s);
                 localSearch(s);
+                assert s != null;
                 if (s.distance < s_best.distance) {
                     nonImprove = 0;
                     s_best = s;

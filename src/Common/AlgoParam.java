@@ -11,7 +11,7 @@ import java.io.File;
  */
 
 public class AlgoParam {
-    public static int seed = 3;
+    public static int seed = (int) System.currentTimeMillis();
     public static double RC_EPS = 1.0e-6; // Tolerance;
 
     public String problem_name;

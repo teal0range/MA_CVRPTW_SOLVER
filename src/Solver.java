@@ -2,6 +2,7 @@ import Algorithm.RoutesMinimizer;
 import Common.AlgoParam;
 import Common.Instance;
 import Common.Nodes;
+import Common.Solution;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -19,15 +20,24 @@ public class Solver {
                 "Isolostar",
                 "EAMA",
                 60,
-                "", ".txt",
+                "c2", ".txt",
                 "TestData"
         );
         preparePaths(param);
         ArrayList<Instance> instances = readInstances(param);
+        System.out.println(instances.size() + " instances" + " > ");
+        for (Instance instance : instances) {
+            System.out.println("\t> " + instance.instName);
+        }
         for (Instance instance : instances) {
             RoutesMinimizer rtm = new RoutesMinimizer(instance);
             System.out.print(instance.instName + " > ");
-            rtm.determineM();
+            int m = rtm.determineM();
+            long t1 = System.currentTimeMillis();
+            Solution s = rtm.Generate_initial_group();
+            System.out.println("\t> " + "Time Consumed > " + (System.currentTimeMillis() - t1));
+//            Core core = new Core(20000/(instance.nodes.length-1),20,instance);
+//            core.run();
         }
     }
 
@@ -44,12 +54,13 @@ public class Solver {
         while (!que.isEmpty()) {
             File folder = que.poll();
             File[] tmpFiles = folder.listFiles();
+            assert tmpFiles != null;
             for (File file : tmpFiles) {
                 if (file.isDirectory()) {
                     que.offer(file);
                 } else {
                     String fname = file.getName();
-                    if (fname.startsWith(param.teston_prefix) && fname.endsWith(param.teston_extension)) {
+                    if (fname.matches("^" + param.teston_prefix + ".*" + param.teston_extension + "$")) {
                         files.add(file);
                     }
                 }

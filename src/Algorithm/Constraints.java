@@ -147,9 +147,8 @@ public class Constraints {
     }
 
     public void UpdateInfo() {
-        // TODO: 2020/4/9 这里需要优化
         int lastNode = 0, lastNodeServiceTime = inst.nodes[0].serviceTime;
-        int arrivalTimes = inst.nodes[0].earlyTime;
+        int arrivalTimes;
         arrivalTimesExtended.set(0,inst.nodes[0].earlyTime);
         for (int i = 1; i < tour.size() + 1; i++) {
             Nodes node = tour.get(i - 1);
@@ -178,7 +177,7 @@ public class Constraints {
 
         lastNode = 0;
         zrrivalTimesExtended.set(tour.size()+1,inst.nodes[0].lateTime);
-        int zrrivalTimes = zrrivalTimesExtended.get(tour.size() + 1);
+        int zrrivalTimes;
         for (int i = tour.size();i>0;i--) {
             node = tour.get(i - 1);
             zrrivalTimes = zrrivalTimesExtended.get(i + 1) - node.serviceTime - inst.dist[lastNode][node.id];

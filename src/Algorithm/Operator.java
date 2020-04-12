@@ -4,12 +4,10 @@ import Common.Nodes;
 import Common.Solution;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.List;
 
 public class Operator {
 
-    // TODO: 2020/4/5 complete the opts
     public void two_opt_star(@NotNull Solution sol, @NotNull Routes r) {
         for (int i = 0; i < sol.routes.size(); i++) {
             if (sol.routes.get(i) == r) continue;
@@ -51,7 +49,6 @@ public class Operator {
     }
 
     public void in_relocate(@NotNull Solution sol, @NotNull Routes route) {
-        // TODO: 2020/4/10 待测试
         for (int in = 0; in < route.size(); in++) {
             Nodes v_in = route.get(in);
             boolean flag = false;
@@ -71,10 +68,6 @@ public class Operator {
         sol.calculateCost();
     }
 
-    public void in_exchange(Routes routes) {
-
-    }
-
     public void out_relocate(Solution sol, Routes routes) {
         out_relocate(sol, routes, Integer.MAX_VALUE, 0);
     }
@@ -83,9 +76,6 @@ public class Operator {
         //搜索外界能插入的点
         //（求求别出bug了
         List<Routes> routes = sol.routes;
-        if (threshold != 0) {
-            Collections.shuffle(routes);
-        }
         for (Routes r : routes) {
             if (r == route) continue;
             out:
@@ -142,7 +132,13 @@ public class Operator {
     }
 
     public void out_exchange(Solution sol) {
-
+        for (int i = 0; i < sol.routes.size(); i++) {
+            for (int j = i + 1; j < sol.routes.size(); j++) {
+                if (out_exchange(sol.routes.get(i), sol.routes.get(j))) {
+                    out_exchange(sol.routes.get(i), sol.routes.get(j));
+                }
+            }
+        }
     }
 
     public boolean out_exchange(@NotNull Routes r1, @NotNull Routes r2) {

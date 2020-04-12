@@ -2,6 +2,7 @@ package Common;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.PriorityQueue;
 
 class DoubleTuple implements Comparable<DoubleTuple> {
@@ -20,14 +21,14 @@ class DoubleTuple implements Comparable<DoubleTuple> {
 
 public class Instance {
     public String instName;
-    public Nodes []nodes;
+    public Nodes[] nodes;
     public int n;
     public int maxVehicles;
     public int Capacity;
-    public int [][]dist;
-    public int [][]closestPoints;
-    public boolean [][]isClose;
-    double closeRatio = 0.3;
+    public int[][] dist;
+    public int[][] closestPoints;
+    public boolean[][] isClose;
+    double closeRatio = 0.5;
 
     public Instance(String instName, @NotNull Nodes[] nodes, int Capacity) {
         this.instName = instName;
@@ -38,7 +39,6 @@ public class Instance {
     }
 
     public Instance() {
-
     }
 
     public void computeDistance(){
@@ -58,7 +58,7 @@ public class Instance {
                 que.add(new DoubleTuple(j,dist[i][j]));
             }
             for (int j=0;j<n-1;j++){
-                closestPoints[i][j] = que.poll().key;
+                closestPoints[i][j] = Objects.requireNonNull(que.poll()).key;
                 if (j < closeRatio * n){
                     isClose[i][closestPoints[i][j]] = true;
                 }

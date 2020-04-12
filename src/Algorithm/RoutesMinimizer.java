@@ -52,11 +52,39 @@ public class RoutesMinimizer {
                     System.out.println();
                 }
             }
-
         }
     }
 
-    public Solution determineM() {
+    @Deprecated
+    public Solution Generate_initial_group(int m) {
+        while (!timeIsUp()) {
+            Solution tp = new Solution(sol);
+            DeleteRoute();
+            if (!EP.isEmpty()) {
+                sol = tp;
+                routes = tp.routes;
+                EP.empty();
+            }
+            if (m == sol.routes.size()) break;
+        }
+        sol.routes = new ArrayList<>(this.routes);
+        System.out.println(sol.routes.size() + " > " + ValidChecker.check(sol));
+        return sol;
+    }
+
+    public Solution Generate_initial_group() {
+        Solution s = new Solution(sol);
+        perturb(inst.n * inst.n / 20);
+        while (sol.routes.size() != s.routes.size()) {
+            sol = s;
+            routes = s.routes;
+            perturb(inst.n * inst.n / 20);
+        }
+        sol.routes = new ArrayList<>(this.routes);
+        return sol;
+    }
+
+    public int determineM() {
         while (!timeIsUp()) {
             Solution tp = new Solution(sol);
             DeleteRoute();
@@ -67,8 +95,7 @@ public class RoutesMinimizer {
             }
         }
         sol.routes = new ArrayList<>(this.routes);
-        System.out.println(sol.routes.size() + " > " + ValidChecker.check(sol));
-        return sol;
+        return sol.routes.size();
     }
 
     public void DeleteRoute() {
@@ -110,7 +137,6 @@ public class RoutesMinimizer {
             if (!flag){
                 penalty[v_in.id]++;
                 insertion_ejection(v_in, 5);
-                flag = true;
             }
             perturb(1000);
         }
@@ -118,6 +144,7 @@ public class RoutesMinimizer {
 
     private void perturb(int I_max) {
         // TODO: 2020/4/6 finish this
+        Collections.shuffle(routes);
         for (int i = 0; i < I_max; i += 10) {
             int c = rnd.nextInt(3);
             switch (c) {
@@ -157,6 +184,7 @@ public class RoutesMinimizer {
         int bestRemoveLeft = 0;
         int bestDisPenalty = 0;
         //找到最优插入剔除组合
+        outer:
         for (Routes r : sol.routes) {
             out:
             for (int insertion_pos = 1; insertion_pos <= r.size(); insertion_pos++) {
@@ -178,6 +206,9 @@ public class RoutesMinimizer {
                             bestRoute = r;
                         }
                         r.remove(insertion_pos);
+                        if (pSumMin == 1) {
+                            break outer;
+                        }
                         continue out;
                     }
                 }
