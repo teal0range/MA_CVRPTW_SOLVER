@@ -1,7 +1,6 @@
 package Algorithm;
 
 import Common.*;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -14,7 +13,7 @@ public class RoutesMinimizer {
     Stack<Nodes> EP;
     int[] penalty;
     long startTime;
-    double maxTime = 5;
+    double maxTime = 2;
     Operator opt;
 
 
@@ -276,8 +275,6 @@ public class RoutesMinimizer {
         return (a << 16) + b;
     }
 
-    @NotNull
-    @Contract(value = "_ -> new", pure = true)
     public static int[] decoding(int code) {
         return new int[]{code >> 16, code % (1 << 16)};
     }

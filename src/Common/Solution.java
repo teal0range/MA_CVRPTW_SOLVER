@@ -33,10 +33,7 @@ public class Solution {
         this.twPenalty = solution.twPenalty;
         this.caPenalty = solution.caPenalty;
         this.infeasibleRoutes = new HashSet<>();
-        Iterator<Integer> iter = solution.infeasibleRoutes.iterator();
-        while (iter.hasNext()) {
-            this.infeasibleRoutes.add(iter.next());
-        }
+        this.infeasibleRoutes.addAll(solution.infeasibleRoutes);
         this.routes = new ArrayList<>(solution.routes.size());
         for (Routes r : solution.routes) {
             this.routes.add(new Routes(r));
@@ -86,10 +83,11 @@ public class Solution {
 
     @Override
     public String toString() {
-        int size = 0;
-        for (Routes r:routes){
-            size+=r.size();
-        }
-        return "size > "+size;
+        return routes.toString();
+//        int size = 0;
+//        for (Routes r:routes){
+//            size+=r.size();
+//        }
+//        return "size > "+size;
     }
 }

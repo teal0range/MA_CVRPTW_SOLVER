@@ -1,8 +1,8 @@
+import Algorithm.Core;
 import Algorithm.RoutesMinimizer;
 import Common.AlgoParam;
 import Common.Instance;
 import Common.Nodes;
-import Common.Solution;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -15,9 +15,9 @@ import java.util.Scanner;
 public class Solver {
     public static void main(String[] args) throws FileNotFoundException {
         AlgoParam param = new AlgoParam(
-                "VRPTW",
+                "CVRPTW",
                 "181870063",
-                "Isolostar",
+                "SouloStar",
                 "EAMA",
                 60,
                 "c2", ".txt",
@@ -32,12 +32,12 @@ public class Solver {
         for (Instance instance : instances) {
             RoutesMinimizer rtm = new RoutesMinimizer(instance);
             System.out.print(instance.instName + " > ");
-            int m = rtm.determineM();
-            long t1 = System.currentTimeMillis();
-            Solution s = rtm.Generate_initial_group();
-            System.out.println("\t> " + "Time Consumed > " + (System.currentTimeMillis() - t1));
-//            Core core = new Core(20000/(instance.nodes.length-1),20,instance);
-//            core.run();
+//            int m = rtm.determineM();
+//            long t1 = System.currentTimeMillis();
+//            Solution s = rtm.Generate_initial_group();
+//            System.out.println("\t> " + "Time Consumed > " + (System.currentTimeMillis() - t1));
+            Core core = new Core(20000 / (instance.nodes.length - 1), 20, instance);
+            core.start();
         }
     }
 
@@ -74,6 +74,7 @@ public class Solver {
         }
         return instances;
     }
+
     @NotNull
     public static Instance readInstanceVRPTW(File file) throws FileNotFoundException {
         Scanner cin = new Scanner(file);

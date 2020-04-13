@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.Iterator;
 
 public class Routes {
-    Instance inst;
+    public Instance inst;
     public ArrayList<Nodes> tour;
     private boolean isFeasible;
     public Constraints cons;
@@ -95,6 +95,14 @@ public class Routes {
     }
     @Override
     public String toString() {
-        return "size > " + tour.size() + " > " +isFeasible;
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (Nodes nodes : this.tour) {
+            sb.append(nodes.id).append(",");
+        }
+        if (tour.size() != 0) sb.deleteCharAt(sb.length() - 1);
+        sb.append("]");
+        return sb.toString();
+//        return "size > " + tour.size() + " > " +isFeasible;
     }
 }

@@ -16,6 +16,7 @@ public class Constraints {
     public ArrayList<Integer> backTw;
     public ArrayList<Integer> distanceTraveled;
     public ArrayList<Integer> currentWeight;
+    Nodes firstVertex, lastVertex;
 
     public Constraints(@NotNull List<Nodes> tour, Instance inst) {
         this.inst = inst;
@@ -36,10 +37,24 @@ public class Constraints {
         backTw.addAll(arrivalTimesExtended);
         distanceTraveled.addAll(arrivalTimesExtended);
         currentWeight.addAll(arrivalTimesExtended);
+        firstVertex = inst.nodes[0];
+        lastVertex = inst.nodes[0];
         if (tour.size() != 0) {
             UpdateInfo();
         }
     }
+
+    public Constraints(@NotNull List<Nodes> tour, Instance inst, Nodes first, Nodes last) {
+        this(tour, inst);
+        firstVertex = first;
+        lastVertex = last;
+    }
+
+    public int[] validMultiInsertion(SubTour v_in, int first, int pos) {
+        // TODO: 2020/4/13 finish this
+        return null;
+    }
+
 
     public int maxRemains() {
         return inst.Capacity - currentWeight.get(currentWeight.size() - 1);
@@ -147,9 +162,9 @@ public class Constraints {
     }
 
     public void UpdateInfo() {
-        int lastNode = 0, lastNodeServiceTime = inst.nodes[0].serviceTime;
+        int lastNode = firstVertex.id, lastNodeServiceTime = firstVertex.serviceTime;
         int arrivalTimes;
-        arrivalTimesExtended.set(0,inst.nodes[0].earlyTime);
+        arrivalTimesExtended.set(0, firstVertex.earlyTime);
         for (int i = 1; i < tour.size() + 1; i++) {
             Nodes node = tour.get(i - 1);
             arrivalTimes = arrivalTimesExtended.get(i - 1) + lastNodeServiceTime + inst.dist[lastNode][node.id];
@@ -164,7 +179,7 @@ public class Constraints {
             lastNode = node.id;
             lastNodeServiceTime = node.serviceTime;
         }
-        Nodes node = inst.nodes[0];
+        Nodes node = lastVertex;
         arrivalTimes = arrivalTimesExtended.get(tour.size()) + lastNodeServiceTime + inst.dist[lastNode][node.id];
         int delta_penalty = arrivalTimes - node.lateTime;
         if (delta_penalty > 0) {
@@ -175,10 +190,10 @@ public class Constraints {
             arrivalTimesExtended.set(tour.size() + 1, Math.max(arrivalTimes, node.earlyTime));
         }
 
-        lastNode = 0;
-        zrrivalTimesExtended.set(tour.size()+1,inst.nodes[0].lateTime);
+        lastNode = lastVertex.id;
+        zrrivalTimesExtended.set(tour.size() + 1, lastVertex.lateTime);
         int zrrivalTimes;
-        for (int i = tour.size();i>0;i--) {
+        for (int i = tour.size(); i > 0; i--) {
             node = tour.get(i - 1);
             zrrivalTimes = zrrivalTimesExtended.get(i + 1) - node.serviceTime - inst.dist[lastNode][node.id];
             delta_penalty = node.earlyTime - zrrivalTimes;
@@ -191,7 +206,7 @@ public class Constraints {
             }
             lastNode = node.id;
         }
-        node = inst.nodes[0];
+        node = firstVertex;
         zrrivalTimes = zrrivalTimesExtended.get(1) - node.serviceTime - inst.dist[lastNode][node.id];
         delta_penalty = node.earlyTime - zrrivalTimes;
         if (delta_penalty > 0) {
@@ -205,12 +220,12 @@ public class Constraints {
         for (int i = 1; i < tour.size(); i++) {
             currentWeight.set(i + 1, currentWeight.get(i) + tour.get(i).demands);
         }
-        currentWeight.set(currentWeight.size() - 1, currentWeight.get(currentWeight.size() - 2) + inst.nodes[0].demands);
-        distanceTraveled.set(1, distanceTraveled.get(0) + inst.dist[inst.nodes[0].id][tour.get(0).id]);
+        currentWeight.set(currentWeight.size() - 1, currentWeight.get(currentWeight.size() - 2) + lastVertex.demands);
+        distanceTraveled.set(1, distanceTraveled.get(0) + inst.dist[firstVertex.id][tour.get(0).id]);
         for (int i = 1; i < tour.size(); i++) {
             distanceTraveled.set(i + 1, distanceTraveled.get(i) + inst.dist[tour.get(i - 1).id][tour.get(i).id]);
         }
-        distanceTraveled.set(distanceTraveled.size() - 1, distanceTraveled.get(distanceTraveled.size() - 2) + inst.dist[inst.nodes[0].id][tour.get(tour.size() - 1).id]);
+        distanceTraveled.set(distanceTraveled.size() - 1, distanceTraveled.get(distanceTraveled.size() - 2) + inst.dist[lastVertex.id][tour.get(tour.size() - 1).id]);
     }
 
     public int distanceTraveled() {
