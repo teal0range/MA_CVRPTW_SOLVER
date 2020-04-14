@@ -18,8 +18,8 @@ public class Solver {
                 "181870063",
                 "SouloStar",
                 "EAMA",
-                30,
-                10,
+                600,
+                200,
                 "c", ".txt",
                 "TestData"
         );
