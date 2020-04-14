@@ -1,7 +1,6 @@
 package Algorithm;
 
 import Common.*;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -17,7 +16,7 @@ public class RoutesMinimizer {
     Operator opt;
 
 
-    public RoutesMinimizer(@NotNull Instance inst, int maxTime) {
+    public RoutesMinimizer(Instance inst, int maxTime) {
         this.inst = inst;
         routes = new LinkedList<>();
         for (int i = 1; i < inst.n; i++) {
@@ -62,7 +61,7 @@ public class RoutesMinimizer {
         return sol;
     }
 
-    public int determineM() {
+    public void determineM() {
         while (!timeIsUp()) {
             Solution tp = new Solution(sol);
             DeleteRoute();
@@ -73,7 +72,6 @@ public class RoutesMinimizer {
             }
         }
         sol.routes = new ArrayList<>(this.routes);
-        return sol.routes.size();
     }
 
     public void DeleteRoute() {
@@ -203,7 +201,7 @@ public class RoutesMinimizer {
     double alpha = 1;
     double factor = 0.99;
 
-    public boolean squeeze(Nodes v_in, @NotNull List<int[]> penalty_ls) {
+    public boolean squeeze(Nodes v_in, List<int[]> penalty_ls) {
         Solution tmp = new Solution(sol);
         int[] minPenalty = new int[]{Integer.MAX_VALUE >> 2, Integer.MAX_VALUE >> 2, Integer.MAX_VALUE >> 2, -1};
         for (int[] penalty : penalty_ls) {
@@ -263,7 +261,7 @@ public class RoutesMinimizer {
         opt.in_relocate(tmp, r);
     }
 
-    public double f(@NotNull int[] Penalty) {
+    public double f(int[] Penalty) {
         return Penalty[0] + alpha * Penalty[1];
     }
 

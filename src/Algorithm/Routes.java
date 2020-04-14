@@ -2,7 +2,6 @@ package Algorithm;
 
 import Common.Instance;
 import Common.Nodes;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,12 +20,12 @@ public class Routes {
         checkFeasibility();
     }
 
-    public Routes(@NotNull Routes r) {
+    public Routes(Routes r) {
         this.inst = r.inst;
         this.tour = new ArrayList<>(r.tour.size());
-        for (int i=0;i<r.tour.size();i++)this.tour.add(null);
-        Collections.copy(this.tour,r.tour);
-        this.cons = new Constraints(tour,inst);
+        for (int i = 0; i < r.tour.size(); i++) this.tour.add(null);
+        Collections.copy(this.tour, r.tour);
+        this.cons = new Constraints(tour, inst);
         checkFeasibility();
     }
 
@@ -46,7 +45,7 @@ public class Routes {
         isFeasible = cons.checkCapacityConstraint() & cons.checkTimeWindowConstraint();
     }
 
-    public void insertSubTour(@NotNull Constraints sub, int breakPoint, int pos) {
+    public void insertSubTour(Constraints sub, int breakPoint, int pos) {
         ArrayList<Nodes> ls = new ArrayList<>();
         for (int i = breakPoint + 1; i < sub.tour.size(); i++) {
             ls.add(sub.tour.get(i));
@@ -60,7 +59,7 @@ public class Routes {
         checkFeasibility();
     }
 
-    public void swap(int src, @NotNull Routes rt, int det) {
+    public void swap(int src, Routes rt, int det) {
         Nodes tmp = tour.get(src);
         tour.set(src, rt.get(det));
         rt.tour.set(det, tmp);
@@ -69,7 +68,7 @@ public class Routes {
         checkFeasibility();
     }
 
-    public void connect(int front, @NotNull Routes routes, int back) {
+    public void connect(int front, Routes routes, int back) {
         ArrayList<Nodes> result = new ArrayList<>(front + 1 + routes.size() - back);
         for (int i = 0; i <= front; i++) {
             result.add(tour.get(i));
@@ -100,11 +99,12 @@ public class Routes {
         checkFeasibility();
     }
 
-    public void removeIter(@NotNull Iterator<Nodes> iter){
+    public void removeIter(Iterator<Nodes> iter) {
         iter.remove();
-        cons = new Constraints(tour,inst);
+        cons = new Constraints(tour, inst);
         checkFeasibility();
     }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

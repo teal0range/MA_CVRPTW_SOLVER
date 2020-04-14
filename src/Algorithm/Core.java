@@ -3,7 +3,6 @@ package Algorithm;
 import Common.*;
 import SparseMatrixPack.Element;
 import SparseMatrixPack.SparseMatrix;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -96,12 +95,12 @@ public class Core {
         }
     }
 
-    public double f(@NotNull Solution sol) {
+    public double f(Solution sol) {
         return sol.distance + sol.caPenalty + sol.twPenalty;
     }
 
-    @NotNull
-    private ArrayList<int[]> findABCycles(@NotNull Solution p1, @NotNull Solution p2) {
+
+    private ArrayList<int[]> findABCycles(Solution p1, Solution p2) {
         SparseMatrix[] mt = new SparseMatrix[3];
         mt[0] = new SparseMatrix();
         mt[2] = mt[0].Route2Gab(p1, p2);
@@ -136,7 +135,7 @@ public class Core {
         return ls;
     }
 
-    private boolean subGraphOf(@NotNull HashSet<Integer> sub, @NotNull HashSet<Integer> sup) {
+    private boolean subGraphOf(HashSet<Integer> sub, HashSet<Integer> sup) {
         for (int edge : sub) {
             if (!sup.contains(edge)) {
                 return false;
@@ -145,7 +144,7 @@ public class Core {
         return true;
     }
 
-    private void deleteSubCycle(@NotNull ArrayList<int[]> ls, @NotNull ArrayList<HashSet<Integer>> edgeList) {
+    private void deleteSubCycle(ArrayList<int[]> ls, ArrayList<HashSet<Integer>> edgeList) {
         BitSet bt = new BitSet(ls.size());
         for (int i = 0; i < edgeList.size(); i++) {
             for (int j = i + 1; j < edgeList.size(); j++) {
@@ -160,8 +159,8 @@ public class Core {
         }
     }
 
-    @NotNull
-    private static String arr2String(@NotNull int[] arr) {
+
+    private static String arr2String(int[] arr) {
         if (arr.length == 0) return "";
         StringBuilder sb = new StringBuilder();
         sb.append(arr[0]);
@@ -171,7 +170,7 @@ public class Core {
         return sb.toString();
     }
 
-    private static void rotate(@NotNull int[] rt) {
+    private static void rotate(int[] rt) {
         if (rt.length == 0) return;
         int pos = 0, min = rt[0];
         for (int i = 2; i < rt.length; i += 2) {

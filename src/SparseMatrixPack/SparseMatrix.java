@@ -2,7 +2,6 @@ package SparseMatrixPack;
 
 import Algorithm.Routes;
 import Common.Solution;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -31,7 +30,7 @@ public class SparseMatrix {
         initializeRpos();
     }
 
-    public void convertRoute(Solution sol, @NotNull ArrayList<int[]> eSets) {
+    public void convertRoute(Solution sol, ArrayList<int[]> eSets) {
         HashSet<Integer> hs = getEdges(sol);
         for (int[] eSet : eSets) {
             for (int i = 0; i < eSet.length; i += 2) {
@@ -52,7 +51,7 @@ public class SparseMatrix {
         initializeRpos();
     }
 
-    public SparseMatrix Route2Gab(@NotNull Solution p1, @NotNull Solution p2) {
+    public SparseMatrix Route2Gab(Solution p1, Solution p2) {
         HashSet<Integer> hs1;
         HashSet<Integer> hs2;
         hs1 = getEdges(p1);
@@ -107,8 +106,8 @@ public class SparseMatrix {
         return newMt;
     }
 
-    @NotNull
-    private HashSet<Integer> getEdges(@NotNull Solution p1) {
+
+    private HashSet<Integer> getEdges(Solution p1) {
         HashSet<Integer> hashSet = new HashSet<>();
         for (Routes r : p1.routes) {
             int lastNode = 0;
@@ -127,13 +126,13 @@ public class SparseMatrix {
         elem = new ArrayList<>();
     }
 
-    public void add(@NotNull Element e) {
+    public void add(Element e) {
         if (e.row + 1 > row) row = e.row + 1;
         if (e.column + 1 > column) column = e.column + 1;
         elem.add(e);
     }
 
-    public void put(@NotNull Element e) {
+    public void put(Element e) {
         int pos = rpos[e.row];
         while (pos < elem.size() && e.column > elem.get(pos).column) {
             pos++;
@@ -165,7 +164,7 @@ public class SparseMatrix {
         }
     }
 
-    public SparseMatrix multiply(@NotNull SparseMatrix mt2) {
+    public SparseMatrix multiply(SparseMatrix mt2) {
         SparseMatrix reMatrix = new SparseMatrix(this.row, mt2.column);
         reMatrix.elem = new ArrayList<>(this.elem.size());
         for (int i = 0; i < this.row; i++) {

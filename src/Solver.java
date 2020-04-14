@@ -2,7 +2,6 @@ import Algorithm.Core;
 import Common.AlgoParam;
 import Common.Instance;
 import Common.Nodes;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -37,8 +36,8 @@ public class Solver {
         }
     }
 
-    @NotNull
-    static ArrayList<Instance> readInstances(@NotNull AlgoParam param) throws FileNotFoundException {
+
+    static ArrayList<Instance> readInstances(AlgoParam param) throws FileNotFoundException {
         File data = new File(param.path_data);
 
         Queue<File> que = new LinkedList<>();
@@ -71,7 +70,7 @@ public class Solver {
         return instances;
     }
 
-    @NotNull
+
     public static Instance readInstanceVRPTW(File file) throws FileNotFoundException {
         Scanner cin = new Scanner(file);
         Instance inst = new Instance();

@@ -1,7 +1,6 @@
 package Common;
 
 import Algorithm.Routes;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,7 +25,7 @@ public class Solution {
         this.infeasibleRoutes = new HashSet<>();
     }
 
-    public Solution(@NotNull Solution solution) {
+    public Solution(Solution solution) {
         this.timeCost = solution.timeCost;
         this.scheduleTime = solution.scheduleTime;
         this.distance = solution.distance;
@@ -40,7 +39,7 @@ public class Solution {
         }
     }
 
-    public void addInFeasible(int i, @NotNull int[] p) {
+    public void addInFeasible(int i, int[] p) {
         infeasibleRoutes.add(i);
         caPenalty += p[0];
         twPenalty += p[1];

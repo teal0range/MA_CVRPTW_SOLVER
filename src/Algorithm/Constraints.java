@@ -2,7 +2,6 @@ package Algorithm;
 
 import Common.Instance;
 import Common.Nodes;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +17,11 @@ public class Constraints {
     public ArrayList<Integer> currentWeight;
     Nodes firstVertex, lastVertex;
 
-    public Constraints(@NotNull List<Nodes> tour, Instance inst) {
+    public Constraints(List<Nodes> tour, Instance inst) {
         this(tour, inst, inst.nodes[0], inst.nodes[0]);
     }
 
-    public Constraints(@NotNull List<Nodes> tour, Instance inst, Nodes first, Nodes last) {
+    public Constraints(List<Nodes> tour, Instance inst, Nodes first, Nodes last) {
         this.inst = inst;
         this.tour = tour;
         int red = 0;
@@ -51,7 +50,7 @@ public class Constraints {
         }
     }
 
-    public int[] validSubTourInsertion(@NotNull Constraints v_in, int breakPoint, int insertPos) {
+    public int[] validSubTourInsertion(Constraints v_in, int breakPoint, int insertPos) {
         //breakPoint 由-1到v_in.tour.size()-1
         //insertPos 由-1到tour.size()-1
         int totalDemands = currentWeight.get(currentWeight.size() - 1) +
@@ -98,13 +97,13 @@ public class Constraints {
         return inst.Capacity - currentWeight.get(currentWeight.size() - 1);
     }
 
-    public int[] validSwap(int src, @NotNull Routes rt, int det) {
+    public int[] validSwap(int src, Routes rt, int det) {
         int[] p = validSubstitute(src, rt.get(det));
         int[] q = rt.cons.validSubstitute(det, tour.get(src));
         return new int[]{p[0] + q[0], p[1] + q[1], p[2] + q[2], src};
     }
 
-    public int[] validConnect(int front, @NotNull Routes tail, int back) {
+    public int[] validConnect(int front, Routes tail, int back) {
         //front 从-1取到tour.size()-1
         //back 从0取到tail.size()
         int totalDemands = this.currentWeight.get(front + 1) +
@@ -123,7 +122,7 @@ public class Constraints {
         return new int[]{capacity_penalty, tw_Penalty, dis_penalty, front};
     }
 
-    public int[] validSubstitute(int src, @NotNull Nodes v_in) {
+    public int[] validSubstitute(int src, Nodes v_in) {
         int totalDemands = this.currentWeight.get(currentWeight.size() - 1)
                 - tour.get(src).demands + v_in.demands;
         int ca_penalty = Math.max(totalDemands - inst.Capacity, 0);
@@ -166,10 +165,10 @@ public class Constraints {
         return new int[]{capacity_penalty, tw_penalty, dis_penalty, pos};
     }
 
-    public int[] validInsertion(@NotNull Nodes v_in, int pos) {
+    public int[] validInsertion(Nodes v_in, int pos) {
         Nodes pre, post;
-        int capacity_penalty=0;
-        if (v_in.demands > maxRemains()){
+        int capacity_penalty = 0;
+        if (v_in.demands > maxRemains()) {
             capacity_penalty += v_in.demands - maxRemains();
         }
         if (pos == 0) {

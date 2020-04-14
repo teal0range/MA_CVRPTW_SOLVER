@@ -2,7 +2,6 @@ package Algorithm;
 
 import Common.Nodes;
 import Common.Solution;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class Operator {
         }
     }
 
-    public void two_opt_star(@NotNull Solution sol, @NotNull Routes r) {
+    public void two_opt_star(Solution sol, Routes r) {
         for (int i = 0; i < sol.routes.size(); i++) {
             if (sol.routes.get(i) == r) continue;
             if (two_opt_star(r, sol.routes.get(i), Integer.MAX_VALUE, 0)) {
@@ -23,7 +22,7 @@ public class Operator {
         }
     }
 
-    public boolean two_opt_star(@NotNull Routes route1, @NotNull Routes route2, int cnt, int threshold) {
+    public boolean two_opt_star(Routes route1, Routes route2, int cnt, int threshold) {
         boolean flag = false;
         for (int front = -1; front < route1.size(); front++) {
             for (int back = 0; back <= route2.size(); back++) {
@@ -54,7 +53,7 @@ public class Operator {
         return flag;
     }
 
-    public void in_relocate(@NotNull Solution sol, @NotNull Routes route) {
+    public void in_relocate(Solution sol, Routes route) {
         for (int in = 0; in < route.size(); in++) {
             Nodes v_in = route.get(in);
             boolean flag = false;
@@ -78,7 +77,7 @@ public class Operator {
         out_relocate(sol, routes, Integer.MAX_VALUE, 0);
     }
 
-    public void out_relocate(@NotNull Solution sol, @NotNull Routes route, int cnt, int threshold) {
+    public void out_relocate(Solution sol, Routes route, int cnt, int threshold) {
         //搜索外界能插入的点
         //（求求别出bug了
         List<Routes> routes = sol.routes;
@@ -131,7 +130,7 @@ public class Operator {
         sol.calculateCost();
     }
 
-    public void out_relocate(@NotNull Solution sol) {
+    public void out_relocate(Solution sol) {
         for (int i = 0; i < sol.routes.size(); i++) {
             out_relocate(sol, sol.routes.get(i), Integer.MAX_VALUE, 0);
         }
@@ -155,11 +154,11 @@ public class Operator {
         }
     }
 
-    public boolean out_exchange(@NotNull Routes r1, @NotNull Routes r2) {
+    public boolean out_exchange(Routes r1, Routes r2) {
         return out_exchange(r1, r2, Integer.MAX_VALUE, 0);
     }
 
-    public boolean out_exchange(@NotNull Routes r1, @NotNull Routes r2, int cnt, int threshold) {
+    public boolean out_exchange(Routes r1, Routes r2, int cnt, int threshold) {
         boolean flag = false;
         for (int i = 0; i < r1.size(); i++) {
             for (int j = 0; j < r2.size(); j++) {

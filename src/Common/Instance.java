@@ -1,7 +1,5 @@
 package Common;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Objects;
 import java.util.PriorityQueue;
 
@@ -30,7 +28,7 @@ public class Instance {
     public boolean[][] isClose;
     double closeRatio = 0.5;
 
-    public Instance(String instName, @NotNull Nodes[] nodes, int Capacity) {
+    public Instance(String instName, Nodes[] nodes, int Capacity) {
         this.instName = instName;
         this.nodes = nodes;
         this.Capacity = Capacity;

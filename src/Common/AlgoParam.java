@@ -5,10 +5,6 @@ import com.google.gson.GsonBuilder;
 
 import java.io.File;
 
-/**
- * AlgoParam
- * - parameters of algorithm
- */
 
 public class AlgoParam {
     public static int seed = (int) System.currentTimeMillis();
