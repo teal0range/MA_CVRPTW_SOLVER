@@ -7,7 +7,7 @@
 项目算例使用了Solomon提出的经典测试集，你可以在TestData下找到它。
 
 ## To start
-该项目暂未完成
+主函数 Solver.java
 
 ## References
 [1] Nagata Y , Br?Ysy O , Dullaert W . A penalty-based edge assembly memetic algorithm for the vehicle routing problem with time windows[J]. Computers & operations research, 2010, 37(4):724-737.
