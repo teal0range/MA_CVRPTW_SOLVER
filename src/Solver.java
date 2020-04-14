@@ -20,7 +20,7 @@ public class Solver {
                 "EAMA",
                 600,
                 200,
-                "c", ".txt",
+                "", ".txt",
                 "TestData"
         );
         preparePaths(param);
