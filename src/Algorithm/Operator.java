@@ -8,6 +8,12 @@ import java.util.List;
 
 public class Operator {
 
+    public void two_opt_star(Solution sol) {
+        for (Routes r : sol.routes) {
+            two_opt_star(sol, r);
+        }
+    }
+
     public void two_opt_star(@NotNull Solution sol, @NotNull Routes r) {
         for (int i = 0; i < sol.routes.size(); i++) {
             if (sol.routes.get(i) == r) continue;
@@ -138,6 +144,14 @@ public class Operator {
                     out_exchange(sol.routes.get(i), sol.routes.get(j));
                 }
             }
+        }
+    }
+
+    public void out_exchange(Solution sol, Routes r) {
+        for (int i = 0; i < sol.routes.size(); i++) {
+            Routes r2 = sol.routes.get(i);
+            if (r == r2) continue;
+            out_exchange(r, r2);
         }
     }
 

@@ -13,11 +13,11 @@ public class RoutesMinimizer {
     Stack<Nodes> EP;
     int[] penalty;
     long startTime;
-    double maxTime = 2;
+    double maxTime = 10;
     Operator opt;
 
 
-    public RoutesMinimizer(@NotNull Instance inst) {
+    public RoutesMinimizer(@NotNull Instance inst, int maxTime) {
         this.inst = inst;
         routes = new LinkedList<>();
         for (int i = 1; i < inst.n; i++) {
@@ -30,28 +30,7 @@ public class RoutesMinimizer {
         penalty = new int[inst.n];
         startTime = System.currentTimeMillis();
         opt = new Operator();
-    }
-
-    public void test() {
-        Routes routes1 = sol.routes.get(0);
-        for (int i = 1; i < 20; i++) {
-            routes1.insert(inst.nodes[i], 0);
-        }
-        Routes routes2 = sol.routes.get(1);
-        for (int i = 21; i < 60; i++) {
-            routes2.insert(inst.nodes[i], 0);
-        }
-        for (int i = 0; i < routes1.size(); i++) {
-            for (int j = 0; j < routes1.size(); j++) {
-                int[] p = routes1.cons.validSwap(i, routes2, j);
-                Routes r1 = new Routes(routes1);
-                Routes r2 = new Routes(routes2);
-                r1.swap(i, r2, j);
-                if (p[1] != r1.cons.twPenalty() + r2.cons.twPenalty()) {
-                    System.out.println();
-                }
-            }
-        }
+        this.maxTime = maxTime;
     }
 
     @Deprecated
@@ -67,7 +46,7 @@ public class RoutesMinimizer {
             if (m == sol.routes.size()) break;
         }
         sol.routes = new ArrayList<>(this.routes);
-        System.out.println(sol.routes.size() + " > " + ValidChecker.check(sol));
+//        System.out.println(sol.routes.size() + " > " + ValidChecker.check(sol));
         return sol;
     }
 
@@ -142,7 +121,6 @@ public class RoutesMinimizer {
     }
 
     private void perturb(int I_max) {
-        // TODO: 2020/4/6 finish this
         Collections.shuffle(routes);
         for (int i = 0; i < I_max; i += 10) {
             int c = rnd.nextInt(3);
@@ -272,11 +250,11 @@ public class RoutesMinimizer {
     }
 
     public static int encoding(int a, int b) {
-        return (a << 16) + b;
+        return (a + 1 << 16) + b + 1;
     }
 
     public static int[] decoding(int code) {
-        return new int[]{code >> 16, code % (1 << 16)};
+        return new int[]{(code >> 16) - 1, code % (1 << 16) - 1};
     }
 
     private void localSearch(Solution tmp, Routes r) {

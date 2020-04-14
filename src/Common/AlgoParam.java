@@ -19,18 +19,20 @@ public class AlgoParam {
     public String author_name;
     public String algo_name;
     public int time_limit;
+    public int genTime;
     public String teston_prefix;
     public String teston_extension;
     public String path_data;
     public String path_result_sol;
     public String path_result_csv;
 
-    public AlgoParam(String problem_name, String author_id, String author_name, String algo_name, int time_limit, String teston_prefix, String teston_extension, String path_data) {
+    public AlgoParam(String problem_name, String author_id, String author_name, String algo_name, int time_limit, int genTime, String teston_prefix, String teston_extension, String path_data) {
         this.problem_name = problem_name;
         this.author_id = author_id;
         this.author_name = author_name;
         this.algo_name = algo_name;
         this.time_limit = time_limit;
+        this.genTime = genTime;
         this.teston_prefix = teston_prefix;
         this.teston_extension = teston_extension;
         this.path_data = path_data;
@@ -48,7 +50,7 @@ public class AlgoParam {
         try {
             File csv = new File(path_result_csv);
             Log.start(csv, false);
-            Log.writeln("instance,N,author_id,author_name,algo,sol,time");
+            Log.writeln("instance,N,author_id,author_name,algo,sol,routes,time");
             Log.end();
         } catch (Exception exception) {
             exception.printStackTrace();

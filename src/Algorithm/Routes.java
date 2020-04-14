@@ -46,8 +46,21 @@ public class Routes {
         isFeasible = cons.checkCapacityConstraint() & cons.checkTimeWindowConstraint();
     }
 
+    public void insertSubTour(@NotNull Constraints sub, int breakPoint, int pos) {
+        ArrayList<Nodes> ls = new ArrayList<>();
+        for (int i = breakPoint + 1; i < sub.tour.size(); i++) {
+            ls.add(sub.tour.get(i));
+        }
+        ls.add(sub.lastVertex);
+        for (int i = 0; i <= breakPoint; i++) {
+            ls.add(sub.tour.get(i));
+        }
+        tour.addAll(pos + 1, ls);
+        cons = new Constraints(tour, inst);
+        checkFeasibility();
+    }
+
     public void swap(int src, @NotNull Routes rt, int det) {
-        // TODO: 2020/4/10 待测试
         Nodes tmp = tour.get(src);
         tour.set(src, rt.get(det));
         rt.tour.set(det, tmp);
@@ -71,7 +84,6 @@ public class Routes {
 
     public void insert(Nodes v_in, int pos) {
         tour.add(pos, v_in);
-        // TODO: 2020/4/6 need optimize
         cons = new Constraints(tour, inst);
         checkFeasibility();
     }

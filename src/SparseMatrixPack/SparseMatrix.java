@@ -12,7 +12,7 @@ public class SparseMatrix {
     public int row;
     public int column;
     public ArrayList<Element> elem;
-    int[] rpos;
+    public int[] rpos;
 
     public SparseMatrix() {
         elem = new ArrayList<>();
@@ -38,7 +38,7 @@ public class SparseMatrix {
                 hs.remove(Element.encoding(eSet[i], eSet[(i + 1) % eSet.length]));
             }
             for (int i = 1; i < eSet.length; i += 2) {
-                hs.add(Element.encoding(eSet[i], eSet[(i + 1) % eSet.length]));
+                hs.add(Element.encoding(eSet[(i + 1) % eSet.length], eSet[i]));
             }
         }
         for (int from : hs) {
@@ -186,6 +186,10 @@ public class SparseMatrix {
         }
         reMatrix.initializeRpos();
         return reMatrix;
+    }
+
+    public boolean contains(int point) {
+        return elem.get(rpos[point]).row == point;
     }
 
     public boolean contains(int from, int to) {

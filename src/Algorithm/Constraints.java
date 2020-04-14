@@ -19,6 +19,10 @@ public class Constraints {
     Nodes firstVertex, lastVertex;
 
     public Constraints(@NotNull List<Nodes> tour, Instance inst) {
+        this(tour, inst, inst.nodes[0], inst.nodes[0]);
+    }
+
+    public Constraints(@NotNull List<Nodes> tour, Instance inst, Nodes first, Nodes last) {
         this.inst = inst;
         this.tour = tour;
         int red = 0;
@@ -39,20 +43,54 @@ public class Constraints {
         currentWeight.addAll(arrivalTimesExtended);
         firstVertex = inst.nodes[0];
         lastVertex = inst.nodes[0];
+
+        firstVertex = first;
+        lastVertex = last;
         if (tour.size() != 0) {
             UpdateInfo();
         }
     }
 
-    public Constraints(@NotNull List<Nodes> tour, Instance inst, Nodes first, Nodes last) {
-        this(tour, inst);
-        firstVertex = first;
-        lastVertex = last;
-    }
-
-    public int[] validMultiInsertion(SubTour v_in, int first, int pos) {
-        // TODO: 2020/4/13 finish this
-        return null;
+    public int[] validSubTourInsertion(@NotNull Constraints v_in, int breakPoint, int insertPos) {
+        //breakPoint 由-1到v_in.tour.size()-1
+        //insertPos 由-1到tour.size()-1
+        int totalDemands = currentWeight.get(currentWeight.size() - 1) +
+                v_in.currentWeight.get(v_in.currentWeight.size() - 1);
+        Nodes Pre = insertPos == -1 ? firstVertex : tour.get(insertPos);
+        Nodes Next = insertPos == tour.size() - 1 ? lastVertex : tour.get(insertPos + 1);
+        Nodes breakNode = breakPoint == -1 ? v_in.firstVertex : v_in.tour.get(breakPoint);
+        Nodes breakNext = breakPoint == v_in.tour.size() - 1 ? v_in.lastVertex : v_in.tour.get(breakPoint + 1);
+        int ca_Penalty = Math.max(totalDemands - inst.Capacity, 0);
+        int dis_Penalty = v_in.distanceTraveled() - inst.dist[Pre.id][Next.id]
+                - inst.dist[breakNode.id][breakNext.id] +
+                inst.dist[Pre.id][breakNext.id] + inst.dist[breakNode.id][Next.id];
+        int tw_Penalty = 0;
+        Nodes lastNode = Pre;
+        int lastArrivalTime = arrivalTimesExtended.get(insertPos + 1);
+        Nodes thisNode;
+        int arrival;
+        for (int i = breakPoint + 1; i < v_in.tour.size(); i++) {
+            thisNode = v_in.tour.get(i);
+            arrival = lastArrivalTime + inst.dist[lastNode.id][thisNode.id] + thisNode.serviceTime;
+            lastArrivalTime = Math.min(thisNode.lateTime, Math.max(thisNode.earlyTime, arrival));
+            tw_Penalty += Math.max(arrival - thisNode.lateTime, 0);
+            lastNode = thisNode;
+        }
+        thisNode = v_in.lastVertex;
+        arrival = lastArrivalTime + inst.dist[lastNode.id][thisNode.id] + thisNode.serviceTime;
+        lastArrivalTime = Math.min(thisNode.lateTime, Math.max(thisNode.earlyTime, arrival));
+        tw_Penalty += Math.max(arrival - thisNode.lateTime, 0);
+        lastNode = thisNode;
+        for (int i = 0; i <= breakPoint; i++) {
+            thisNode = v_in.tour.get(i);
+            arrival = lastArrivalTime + inst.dist[lastNode.id][thisNode.id] + thisNode.serviceTime;
+            lastArrivalTime = Math.min(thisNode.lateTime, Math.max(thisNode.earlyTime, arrival));
+            tw_Penalty += Math.max(arrival - thisNode.lateTime, 0);
+            lastNode = thisNode;
+        }
+        tw_Penalty += backTw.get(insertPos + 2) + Math.max(lastArrivalTime + lastNode.serviceTime
+                + inst.dist[lastNode.id][Next.id] - zrrivalTimesExtended.get(insertPos + 2), 0);
+        return new int[]{ca_Penalty, tw_Penalty, dis_Penalty, RoutesMinimizer.encoding(breakPoint, insertPos)};
     }
 
 
@@ -61,7 +99,6 @@ public class Constraints {
     }
 
     public int[] validSwap(int src, @NotNull Routes rt, int det) {
-        // TODO: 2020/4/9 待测试
         int[] p = validSubstitute(src, rt.get(det));
         int[] q = rt.cons.validSubstitute(det, tour.get(src));
         return new int[]{p[0] + q[0], p[1] + q[1], p[2] + q[2], src};
@@ -87,7 +124,6 @@ public class Constraints {
     }
 
     public int[] validSubstitute(int src, @NotNull Nodes v_in) {
-        // TODO: 2020/4/9 待测试
         int totalDemands = this.currentWeight.get(currentWeight.size() - 1)
                 - tour.get(src).demands + v_in.demands;
         int ca_penalty = Math.max(totalDemands - inst.Capacity, 0);

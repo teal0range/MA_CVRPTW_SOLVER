@@ -1,5 +1,4 @@
 import Algorithm.Core;
-import Algorithm.RoutesMinimizer;
 import Common.AlgoParam;
 import Common.Instance;
 import Common.Nodes;
@@ -19,8 +18,9 @@ public class Solver {
                 "181870063",
                 "SouloStar",
                 "EAMA",
-                60,
-                "c2", ".txt",
+                30,
+                10,
+                "c", ".txt",
                 "TestData"
         );
         preparePaths(param);
@@ -30,14 +30,10 @@ public class Solver {
             System.out.println("\t> " + instance.instName);
         }
         for (Instance instance : instances) {
-            RoutesMinimizer rtm = new RoutesMinimizer(instance);
             System.out.print(instance.instName + " > ");
-//            int m = rtm.determineM();
-//            long t1 = System.currentTimeMillis();
-//            Solution s = rtm.Generate_initial_group();
-//            System.out.println("\t> " + "Time Consumed > " + (System.currentTimeMillis() - t1));
-            Core core = new Core(20000 / (instance.nodes.length - 1), 20, instance);
-            core.start();
+            Core core = new Core(20000 / (instance.nodes.length - 1), 20,
+                    instance, param.time_limit, param.genTime, param);
+            core.run();
         }
     }
 
@@ -113,17 +109,11 @@ public class Solver {
     static void preparePaths(AlgoParam param) {
         try{
             File dir_result = new File("result");
-            if(!dir_result.exists()|| !dir_result.isDirectory()){
-                dir_result.mkdir();
-            }
+            if (!dir_result.exists() || !dir_result.isDirectory()) dir_result.mkdir();
             File dir_problem = new File(dir_result, param.problem_name);
-            if(!dir_problem.exists() || !dir_problem.isDirectory()){
-                dir_problem.mkdir();
-            }
+            if (!dir_problem.exists() || !dir_problem.isDirectory()) dir_problem.mkdir();
             File dir_algo = new File(dir_problem, param.algo_name);
-            if(!dir_algo.exists() || !dir_algo.isDirectory()){
-                dir_algo.mkdir();
-            }
+            if (!dir_algo.exists() || !dir_algo.isDirectory()) dir_algo.mkdir();
 
             param.path_result_sol = dir_algo.getAbsolutePath();
             param.path_result_csv = dir_problem.getAbsolutePath() + "/" + param.csv_name();
