@@ -74,7 +74,7 @@ public class Solver {
     public static Instance readInstanceVRPTW(File file) throws FileNotFoundException {
         Scanner cin = new Scanner(file);
         Instance inst = new Instance();
-        inst.instName = file.getName();
+        inst.instName = file.getName().replace(".txt", "");
 
         String line = cin.nextLine();
         while (!line.startsWith("CUST ")) {
