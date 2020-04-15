@@ -54,22 +54,30 @@ public class Operator {
         return flag;
     }
 
+    public void in_relocate(Solution sol) {
+        for (Routes r : sol.routes) {
+            in_relocate(sol, r);
+        }
+    }
+
     public void in_relocate(Solution sol, Routes route) {
         for (int in = 0; in < route.size(); in++) {
+            int caPenalty = route.cons.caPenalty();
+            int twPenalty = route.cons.twPenalty();
             Nodes v_in = route.get(in);
+            route.remove(in);
             boolean flag = false;
-            for (int pos = 0; pos < in && !flag; pos++) {
+            for (int pos = 0; pos < route.size() && !flag; pos++) {
                 if (!route.inst.isClose[route.get(pos).id][v_in.id]) continue;
                 int[] p = route.cons.validInsertion(v_in, pos);
-                int[] q = route.cons.validRemove(in);
-                if ((p[0] + q[0] <= route.cons.caPenalty()
-                        && p[1] + q[1] <= route.cons.twPenalty() &&
-                        (p[2] + q[2] < 0 || !route.isFeasible()))) {
-                    route.remove(in);
+                if ((p[0] <= caPenalty
+                        && p[1] <= twPenalty &&
+                        (p[2] < 0 || !route.isFeasible()))) {
                     route.insert(v_in, pos);
                     flag = true;
                 }
             }
+            if (!flag) route.insert(v_in, in);
         }
         sol.calculateCost();
     }
