@@ -56,12 +56,11 @@ public class Core {
                 sigma.add(new Solution(rtm.Generate_initial_group()));
             }
         } else {
-            sigma = new ArrayList<>(n_pop);
             sigma.add(res.sol);
             rtm.sol = new Solution(res.sol);
             rtm.routes = rtm.sol.routes;
             for (int i = 1; i < n_pop; i++) {
-                sigma.add(new Solution(rtm.Generate_initial_group()));
+                sigma.set(n_pop - 1, new Solution(rtm.Generate_initial_group()));
             }
         }
         res.sol = sigma.get(0);
