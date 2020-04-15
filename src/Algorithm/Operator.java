@@ -26,6 +26,7 @@ public class Operator {
         boolean flag = false;
         for (int front = -1; front < route1.size(); front++) {
             for (int back = 0; back <= route2.size(); back++) {
+                if (front == -1 && back == route2.size() || front == route1.size() - 1 && back == 0) continue;
                 if (front != -1 && back != route2.size() &&
                         !route1.inst.isClose[route1.get(front).id][route2.get(back).id])
                     continue;
@@ -33,7 +34,7 @@ public class Operator {
                 int[] q = route2.cons.validConnect(back - 1, route1, front + 1);
                 if ((p[0] + q[0] <= route1.cons.caPenalty() + route2.cons.caPenalty()
                         && p[1] + q[1] <= route1.cons.twPenalty() + route2.cons.twPenalty()) &&
-                        (p[2] + q[2] < threshold || !route1.isFeasible() || !route2.isFeasible())) {
+                        (p[2] + q[2] < threshold || (!route1.isFeasible() || !route2.isFeasible()))) {
                     Routes tmp = new Routes(route1);
                     route1.connect(front, route2, back);
                     try {
@@ -79,10 +80,9 @@ public class Operator {
 
     public void out_relocate(Solution sol, Routes route, int cnt, int threshold) {
         //搜索外界能插入的点
-        //（求求别出bug了
         List<Routes> routes = sol.routes;
         for (Routes r : routes) {
-            if (r == route) continue;
+            if (r == route || r.size() == 1) continue;
             out:
             for (int outer = 0; outer < r.size(); outer++) {
                 for (int inner = 0; inner <= route.size(); inner++) {
@@ -122,6 +122,10 @@ public class Operator {
                             sol.calculateCost();
                             return;
                         }
+                        if (route.size() == 1) {
+                            sol.calculateCost();
+                            return;
+                        }
                         break outIn;
                     }
                 }
@@ -150,7 +154,7 @@ public class Operator {
         for (int i = 0; i < sol.routes.size(); i++) {
             Routes r2 = sol.routes.get(i);
             if (r == r2) continue;
-            out_exchange(r, r2);
+            if (out_exchange(r, r2)) sol.calculateCost();
         }
     }
 

@@ -95,6 +95,7 @@ public class Core {
         }
     }
 
+
     public double f(Solution sol) {
         return sol.distance + sol.caPenalty + sol.twPenalty;
     }
@@ -109,12 +110,12 @@ public class Core {
             mt[i].row = mt[i].column = inst.n;
             mt[i].initializeRpos();
         }
-        int next = 1;
         SparseMatrix rt = mt[0].multiply(mt[1]);
         HashSet<String> hs = new HashSet<>();
         ArrayList<HashSet<Integer>> edgeList = new ArrayList<>();
         ArrayList<int[]> ls = new ArrayList<>();
-        while (rt.size() != 0) {
+        int size = 0;
+        while (rt.size() != 0 && size++ < 5) {
             for (Element e : rt.elem) {
                 if (e.row == e.column) {
                     for (int i = 0; i < e.routes.size(); i++) {
@@ -133,6 +134,13 @@ public class Core {
         }
         deleteSubCycle(ls, edgeList);
         return ls;
+    }
+
+    private boolean cycleChecker(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == arr[(i + 1) % arr.length]) return false;
+        }
+        return true;
     }
 
     private boolean subGraphOf(HashSet<Integer> sub, HashSet<Integer> sup) {
@@ -304,10 +312,10 @@ public class Core {
         for (int index : s.infeasibleRoutes) {
             Routes r = s.routes.get(index);
             while (true) {
+                opt.out_exchange(s, r);
                 opt.two_opt_star(s, r);
                 opt.out_relocate(s, r);
-                opt.out_exchange(s, r);
-                if (f(s) < p) {
+                if (f(s.caPenalty, s.twPenalty) < p) {
                     p = f(s.caPenalty, s.twPenalty);
                 } else {
                     break;
@@ -318,16 +326,8 @@ public class Core {
 
 
     private void localSearch(Solution s) {
-        double p = f(s);
-        while (true) {
-            opt.out_exchange(s);
-            opt.out_exchange(s);
-            opt.two_opt_star(s);
-            if (f(s) < p) {
-                p = f(s);
-            } else {
-                break;
-            }
-        }
+        opt.out_exchange(s);
+        opt.out_relocate(s);
+        opt.two_opt_star(s);
     }
 }

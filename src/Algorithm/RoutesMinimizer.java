@@ -49,6 +49,17 @@ public class RoutesMinimizer {
         return sol;
     }
 
+    public boolean SolutionChecker(Solution p1) {
+        HashSet<Integer> hs = new HashSet<>();
+        for (Routes r : p1.routes) {
+            for (Nodes node : r.tour) {
+                if (hs.contains(node.id)) return false;
+                hs.add(node.id);
+            }
+        }
+        return true;
+    }
+
     public Solution Generate_initial_group() {
         Solution s = new Solution(sol);
         perturb(inst.n * inst.n / 20);
@@ -68,7 +79,7 @@ public class RoutesMinimizer {
             if (!EP.isEmpty()) {
                 sol = tp;
                 routes = tp.routes;
-                EP.empty();
+                EP.clear();
             }
         }
         sol.routes = new ArrayList<>(this.routes);
@@ -258,7 +269,7 @@ public class RoutesMinimizer {
     private void localSearch(Solution tmp, Routes r) {
         opt.out_relocate(tmp, r);
         opt.two_opt_star(tmp, r);
-        opt.in_relocate(tmp, r);
+//        opt.in_relocate(tmp, r);
     }
 
     public double f(int[] Penalty) {
