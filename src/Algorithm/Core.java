@@ -58,6 +58,8 @@ public class Core {
         } else {
             sigma = new ArrayList<>(n_pop);
             sigma.add(res.sol);
+            rtm.sol = new Solution(res.sol);
+            rtm.routes = rtm.sol.routes;
             for (int i = 1; i < n_pop; i++) {
                 sigma.add(new Solution(rtm.Generate_initial_group()));
             }
@@ -134,13 +136,6 @@ public class Core {
         }
         deleteSubCycle(ls, edgeList);
         return ls;
-    }
-
-    private boolean cycleChecker(int[] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i] == arr[(i + 1) % arr.length]) return false;
-        }
-        return true;
     }
 
     private boolean subGraphOf(HashSet<Integer> sub, HashSet<Integer> sup) {

@@ -97,7 +97,7 @@ public class Solution {
         for (Routes tour : routes) {
             sb.append(inst.nodes[0].id).append(" ").append(inst.nodes[0].xCoordinate).append(" ").append(inst.nodes[0].yCoordinate).append("\r\n");
             for (Nodes node : tour.tour) {
-                sb.append(node.id).append(" ").append(node.yCoordinate).append(" ").append(node.yCoordinate).append("\r\n");
+                sb.append(node.id).append(" ").append(node.xCoordinate).append(" ").append(node.yCoordinate).append("\r\n");
             }
             sb.append(inst.nodes[0].id).append(" ").append(inst.nodes[0].xCoordinate).append(" ").append(inst.nodes[0].yCoordinate).append("\r\n");
         }
