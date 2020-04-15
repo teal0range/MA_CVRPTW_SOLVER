@@ -118,10 +118,10 @@ public class RoutesMinimizer {
                     }
                 }
             }
-            if (!flag&&penalty_ls.size()>0){
-                flag = squeeze(v_in,penalty_ls);
+            if (!flag && penalty_ls.size() > 0) {
+                flag = squeeze(v_in, penalty_ls);
             }
-            if (!flag){
+            if (!flag) {
                 penalty[v_in.id]++;
                 insertion_ejection(v_in, 5);
             }
@@ -130,6 +130,12 @@ public class RoutesMinimizer {
     }
 
     private void perturb(int I_max) {
+        perturb(I_max, routes, sol);
+    }
+
+    public static void perturb(int I_max, List<Routes> routes, Solution sol) {
+        Random rnd = new Random();
+        Operator opt = new Operator();
         Collections.shuffle(routes);
         for (int i = 0; i < I_max; i += 10) {
             int c = rnd.nextInt(3);

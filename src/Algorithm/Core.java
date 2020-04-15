@@ -38,61 +38,51 @@ public class Core {
     }
 
     public void run() {
-        int gen = 1;
-        while (!timeIsUp()) {
-            EAMA(N_pop, N_ch);
-            System.out.println("\t MA > Gen " + gen + " > dis > " + res.sol.distance + " > " + res.time + "s");
-            gen++;
-        }
+        EAMA(N_pop, N_ch);
         res.output(inst);
     }
 
     private void EAMA(int n_pop, int n_ch) {
         int maxNonImprove = 100;
-        int nonImprove = 0;
-        if (sigma == null) {
-            sigma = new ArrayList<>(n_pop);
-            for (int i = 0; i < n_pop; i++) {
-                sigma.add(new Solution(rtm.Generate_initial_group()));
-            }
-        } else {
-            sigma.add(res.sol);
-            rtm.sol = new Solution(res.sol);
-            rtm.routes = rtm.sol.routes;
-            for (int i = 1; i < n_pop; i++) {
-                sigma.set(n_pop - 1, new Solution(rtm.Generate_initial_group()));
-            }
+
+        sigma = new ArrayList<>(n_pop);
+        for (int i = 0; i < n_pop; i++) {
+            sigma.add(new Solution(rtm.Generate_initial_group()));
         }
         res.sol = sigma.get(0);
-        Collections.shuffle(sigma);
-        for (int i = 0; i < n_pop; i++) {
-            Solution p1, p2, s, s_best;
-            p1 = new Solution(sigma.get(i));
-            p2 = new Solution(sigma.get((i + 1) % n_pop));
-            s_best = p1;
-            for (int j = 0; j < n_ch; j++) {
-                if (nonImprove++ > 2 * maxNonImprove) break;
-                if (nonImprove < maxNonImprove) {
-                    s = single_EAX(p1, p2);
-                } else {
-                    s = block_EAX(p1, p2);
+        int gen = 0;
+        while (!timeIsUp()) {
+            Collections.shuffle(sigma);
+            Solution mutation = sigma.get(rnd.nextInt(sigma.size()));
+            RoutesMinimizer.perturb(2000, mutation.routes, mutation);
+            gen++;
+            int nonImprove = 0;
+            for (int i = 0; i < n_pop; i++) {
+                Solution p1, p2, s, s_best;
+                p1 = new Solution(sigma.get(i));
+                p2 = new Solution(sigma.get((i + 1) % n_pop));
+                s_best = p1;
+                for (int j = 0; j < n_ch; j++) {
+                    if (nonImprove++ > 2 * maxNonImprove) break;
+                    if (nonImprove < maxNonImprove) {
+                        s = single_EAX(p1, p2);
+                    } else {
+                        s = block_EAX(p1, p2);
+                    }
+                    repair(s);
+                    localSearch(s);
+                    if (f(s) < f(s_best)) {
+                        nonImprove = 0;
+                        s_best = s;
+                    }
                 }
-                repair(s);
-                localSearch(s);
-                if (f(s) < f(s_best)) {
-                    nonImprove = 0;
-                    s_best = s;
+                sigma.set(i, s_best);
+                if (s_best.infeasibleRoutes.size() == 0 && s_best.distance < res.sol.distance) {
+                    res.sol = s_best;
+                    res.time = time();
                 }
             }
-            sigma.set(i, s_best);
-        }
-        int dis = res.sol.distance;
-        for (Solution s : sigma) {
-            if (s.infeasibleRoutes.size() == 0 && s.distance < dis) {
-                res.sol = s;
-                res.time = time();
-                dis = s.distance;
-            }
+            System.out.println("\t MA > Gen " + gen + " > dis > " + res.sol.distance + " > " + res.time + "s");
         }
     }
 
