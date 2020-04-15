@@ -106,7 +106,7 @@ public class Core {
         ArrayList<HashSet<Integer>> edgeList = new ArrayList<>();
         ArrayList<int[]> ls = new ArrayList<>();
         int size = 0;
-        while (rt.size() != 0 && size++ < 5) {
+        while (rt.size() != 0 && size++ < 10) {
             for (Element e : rt.elem) {
                 if (e.row == e.column) {
                     for (int i = 0; i < e.routes.size(); i++) {

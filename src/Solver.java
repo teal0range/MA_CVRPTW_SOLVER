@@ -17,9 +17,9 @@ public class Solver {
                 "181870063",
                 "SouloStar",
                 "EAMA",
-                300,
-                60,
-                "c205", ".txt",
+                1200,
+                200,
+                "c203", ".txt",
                 "TestData"
         );
         preparePaths(param);
