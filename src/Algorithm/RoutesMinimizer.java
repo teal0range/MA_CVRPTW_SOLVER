@@ -144,6 +144,7 @@ public class RoutesMinimizer {
                     opt.out_relocate(sol, sol.routes.get(rnd.nextInt(sol.routes.size())),
                             10, sol.distance / 50);
                 case 1: {
+                    if (sol.routes.size() == 1) continue;
                     Routes r1 = sol.routes.get(rnd.nextInt(sol.routes.size()));
                     Routes r2 = sol.routes.get(rnd.nextInt(sol.routes.size()));
                     while (r1 == r2) {
@@ -154,6 +155,7 @@ public class RoutesMinimizer {
                     }
                 }
                 case 2: {
+                    if (sol.routes.size() == 1) continue;
                     Routes r1 = sol.routes.get(rnd.nextInt(sol.routes.size()));
                     Routes r2 = sol.routes.get(rnd.nextInt(sol.routes.size()));
                     while (r1 == r2) {
